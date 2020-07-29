@@ -281,18 +281,18 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const headerElement = document.querySelector('.header');
-const footerElement = document.querySelector('.footer');
-const footerStatisticElement = footerElement.querySelector('.footer__statistics');
-const mainElement = document.querySelector('.main');
+const headerElement = document.querySelector(`.header`);
+const footerElement = document.querySelector(`.footer`);
+const footerStatisticElement = footerElement.querySelector(`.footer__statistics`);
+const mainElement = document.querySelector(`.main`);
 
 render(headerElement, createUserProfileBlockTemplate(), `beforeend`);
 render(mainElement, createMainNavigationTemplate(), `beforeend`);
 render(mainElement, createSortTemplate(), `beforeend`);
 render(mainElement, createFilmsBlockTemplate(), `beforeend`);
 
-const filmsBlockElement = document.querySelector('.films');
-const filmsContainerElement = filmsBlockElement.querySelector('.films-list__container');
+const filmsBlockElement = document.querySelector(`.films`);
+const filmsContainerElement = filmsBlockElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < FILMS_CARD_COUNT; i++) {
   render(filmsContainerElement, createFilmCardTemplate(), `beforeend`);
@@ -303,14 +303,14 @@ render(filmsContainerElement, createShowMoreTemplate(), `afterend`);
 render(filmsBlockElement, createTopRatedBlockTemplate(), `beforeend`);
 render(filmsBlockElement, createMostRecommendedBlockTemplate(), `beforeend`);
 
-const [topRatedContainerElement, mostRecommendedContainerElement] = filmsBlockElement.querySelectorAll('.films-list--extra');
+const [topRatedContainerElement, mostRecommendedContainerElement] = filmsBlockElement.querySelectorAll(`.films-list--extra`);
 
-const topRatedFilmsElement = topRatedContainerElement.querySelector('.films-list__container');
+const topRatedFilmsElement = topRatedContainerElement.querySelector(`.films-list__container`);
 for (let i = 0; i < TOP_RATED_COUNT; i++) {
   render(topRatedFilmsElement, createFilmCardTemplate(), `beforeend`);
 }
 
-const mostRecommendedFilmsElement = mostRecommendedContainerElement.querySelector('.films-list__container');
+const mostRecommendedFilmsElement = mostRecommendedContainerElement.querySelector(`.films-list__container`);
 for (let i = 0; i < MOST_RECOMMENDED_COUNT; i++) {
   render(mostRecommendedFilmsElement, createFilmCardTemplate(), `beforeend`);
 }
