@@ -1,5 +1,7 @@
-export const createStatisticTemplate = () => {
+export const createStatisticTemplate = (count) => {
+  const format = new Intl.NumberFormat(`ru-RU`).format(count);
   return (
-    `<p>130 291 movies inside</p>`
+    `<p>${format} movies inside</p>`
   );
 };
+
