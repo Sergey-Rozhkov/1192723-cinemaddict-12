@@ -81,4 +81,4 @@ for (let i = 0, len = mostRecommendedFilms.length; i < len; i++) {
 }
 
 render(footerStatisticElement, createStatisticTemplate(filmsCountInBase), `beforeend`);
-//render(footerElement, createFilmDetailsTemplate(films[0]), `afterend`);
+render(footerElement, createFilmDetailsTemplate(films[0]), `afterend`);
