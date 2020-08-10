@@ -39,9 +39,9 @@ render(mainElement, createFilmsBlockTemplate(), `beforeend`);
 const filmsBlockElement = document.querySelector(`.films`);
 const filmsContainerElement = filmsBlockElement.querySelector(`.films-list__container`);
 
-for (let i = 0, len = Math.min(films.length, FILMS_COUNT_PER_STEP); i < len; i++) {
-  render(filmsContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
-}
+films
+  .slice(0, FILMS_COUNT_PER_STEP)
+  .forEach((film) => render(filmsContainerElement, createFilmCardTemplate(film), `beforeend`));
 
 if (films.length > FILMS_COUNT_PER_STEP) {
   let renderedFilmCount = FILMS_COUNT_PER_STEP;

@@ -1,81 +1,99 @@
 import {getRandomInteger, getRandomElements, getRandomFloat, generateDate, getRandomElement} from "../utils.js";
 import {generateComments} from "./comment.js";
 
-const generateName = () => {
-  const names = [
-    `The Dance of Life`,
-    `Sagebrush Trail`,
-    `The Man with the Golden Arm`,
-    `Santa Claus Conquers the Martians`,
-    `Popeye the Sailor Meets Sindbad the Sailor`
-  ];
+const names = [
+  `The Dance of Life`,
+  `Sagebrush Trail`,
+  `The Man with the Golden Arm`,
+  `Santa Claus Conquers the Martians`,
+  `Popeye the Sailor Meets Sindbad the Sailor`
+];
 
+const pathToPosterFolder = `./images/posters/`;
+const posters = [
+  `made-for-each-other.png`,
+  `popeye-meets-sinbad.png`,
+  `sagebrush-trail.jpg`,
+  `santa-claus-conquers-the-martians.jpg`,
+  `the-dance-of-life.jpg`,
+  `the-great-flamarion.jpg`,
+  `the-man-with-the-golden-arm.jpg`
+];
+
+const genres = [
+  `Comedy`,
+  `Drama`,
+  `Musical`,
+  `Western`,
+  `Film-Noir`,
+  `Mystery`
+];
+
+const countries = [
+  `USA`,
+  `Germany`,
+  `France`,
+  `Russia`
+];
+
+const descriptions = [
+  `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
+  `Cras aliquet varius magna, non porta ligula feugiat eget.`,
+  `Fusce tristique felis at fermentum pharetra.`,
+  `Aliquam id orci ut lectus varius viverra.`,
+  `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+  `Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.`,
+  `Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.`,
+  `Sed sed nisi sed augue convallis suscipit in sed felis.`,
+  `Aliquam erat volutpat.`,
+  `Nunc fermentum tortor ac porta dapibus.`,
+  `In rutrum ac purus sit amet tempus.`
+];
+
+const actors = [
+  `John Black`,
+  `Anthony Tyler`,
+  `Thomas Webster`,
+  `Stewart Reynolds`,
+  `Norah Bishop`,
+  `Cameron Owens`
+];
+
+const people = [
+  `John Black`,
+  `Anthony Tyler`,
+  `Thomas Webster`,
+  `Stewart Reynolds`,
+  `Norah Bishop`,
+  `Cameron Owens`
+];
+
+const generateName = () => {
   return getRandomElement(names);
 };
 
 const generatePoster = () => {
-  const pathToPosterFolder = `./images/posters/`;
-  const posters = [
-    `made-for-each-other.png`,
-    `popeye-meets-sinbad.png`,
-    `sagebrush-trail.jpg`,
-    `santa-claus-conquers-the-martians.jpg`,
-    `the-dance-of-life.jpg`,
-    `the-great-flamarion.jpg`,
-    `the-man-with-the-golden-arm.jpg`
-  ];
-
   const randomIndex = getRandomInteger(0, posters.length - 1);
 
   return `${pathToPosterFolder}${posters[randomIndex]}`;
 };
 
 const generateGenre = () => {
-  const genres = [
-    `Comedy`,
-    `Drama`,
-    `Musical`,
-    `Western`,
-    `Film-Noir`,
-    `Mystery`
-  ];
-
   const genresCount = getRandomInteger(1, genres.length - 1);
 
   return getRandomElements(genres, genresCount);
 };
 
 const generateCountry = () => {
-  const genres = [
-    `USA`,
-    `Germany`,
-    `France`,
-    `Russia`
-  ];
+  const countryCount = getRandomInteger(1, countries.length - 1);
 
-  const genresCount = getRandomInteger(1, genres.length - 1);
-
-  return getRandomElements(genres, genresCount);
+  return getRandomElements(countries, countryCount);
 };
 
 const generateDescription = (limit) => {
-  const description = [
-    `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
-    `Cras aliquet varius magna, non porta ligula feugiat eget.`,
-    `Fusce tristique felis at fermentum pharetra.`,
-    `Aliquam id orci ut lectus varius viverra.`,
-    `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
-    `Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.`,
-    `Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.`,
-    `Sed sed nisi sed augue convallis suscipit in sed felis.`,
-    `Aliquam erat volutpat.`,
-    `Nunc fermentum tortor ac porta dapibus.`,
-    `In rutrum ac purus sit amet tempus.`
-  ];
-
   const sentenceCount = getRandomInteger(1, limit);
 
-  return getRandomElements(description, sentenceCount).join(` `);
+  return getRandomElements(descriptions, sentenceCount).join(` `);
 };
 
 const generateDuration = () => {
@@ -83,29 +101,10 @@ const generateDuration = () => {
 };
 
 const generateProducer = () => {
-  const actors = [
-    `John Black`,
-    `Anthony Tyler`,
-    `Thomas Webster`,
-    `Stewart Reynolds`,
-    `Norah Bishop`,
-    `Cameron Owens`
-  ];
-
   return getRandomElement(actors);
 };
 
-
 const generatePeople = (limit) => {
-  const people = [
-    `John Black`,
-    `Anthony Tyler`,
-    `Thomas Webster`,
-    `Stewart Reynolds`,
-    `Norah Bishop`,
-    `Cameron Owens`
-  ];
-
   const count = getRandomInteger(1, limit);
 
   return getRandomElements(people, count);

@@ -1,3 +1,5 @@
+import {MAX_DAY_GAP} from "./const.js";
+
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -11,8 +13,8 @@ export const getRandomFloat = (a = 1, b = 0) => {
   return (lower + Math.random() * (upper - lower)).toFixed(1);
 };
 
-export const getRandomElements = (arr, count) => {
-  const tmp = JSON.parse(JSON.stringify(arr));
+export const getRandomElements = (data, count) => {
+  const tmp = data.slice();
   let result = [];
 
   for (let i = 0; i < count; i++) {
@@ -30,8 +32,7 @@ export const getRandomElement = (data) => {
 };
 
 export const generateDate = () => {
-  const maxDaysGap = 7;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+  const daysGap = getRandomInteger(-MAX_DAY_GAP, MAX_DAY_GAP);
   const currentDate = new Date();
 
   currentDate.setHours(getRandomInteger(0, 23), getRandomInteger(0, 59));
