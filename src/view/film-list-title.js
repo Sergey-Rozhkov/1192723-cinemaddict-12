@@ -1,15 +1,13 @@
 import {createElement} from "../utils.js";
 
-export default class FilmsList {
+export default class FilmListTitle {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
     return (
-      `<section class="films-list">
-        
-      </section>`
+      `<h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>`
     );
   }
 

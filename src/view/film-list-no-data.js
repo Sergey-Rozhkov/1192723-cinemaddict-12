@@ -1,15 +1,13 @@
 import {createElement} from "../utils.js";
 
-export default class FilmsList {
+export default class FilmsListNoData {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
     return (
-      `<section class="films-list">
-        
-      </section>`
+      `<h2 class="films-list__title">There are no movies in our database</h2>`
     );
   }
 
