@@ -1,16 +1,18 @@
 import {FILMS_CARD_COUNT, TOP_RATED_COUNT, MOST_RECOMMENDED_COUNT, FILMS_COUNT_PER_STEP} from "./const.js";
-import {getRandomInteger} from "./utils.js";
+import {getRandomInteger, renderElement, RenderPosition} from "./utils.js";
 
-import {createUserProfileBlockTemplate} from "./view/user-profile-block.js";
-import {createMainNavigationTemplate} from "./view/main-navigation.js";
-import {createSortTemplate} from "./view/sort.js";
-import {createFilmsBlockTemplate} from "./view/films-block.js";
-import {createFilmCardTemplate} from "./view/film-card.js";
-import {createShowMoreTemplate} from "./view/show-more.js";
-import {createMostRecommendedBlockTemplate} from "./view/most-recommended-block.js";
-import {createTopRatedBlockTemplate} from "./view/top-rated-block.js";
-import {createFilmDetailsTemplate} from "./view/film-details.js";
-import {createStatisticTemplate} from "./view/statistic.js";
+import UserProfileBlockView from "./view/user-profile-block.js";
+import FilterView from "./view/filter.js";
+import SortView from "./view/sort.js";
+import FilmsBlockView from "./view/films-block.js";
+import FilmsListView from "./view/film-list.js";
+import FilmsView from "./view/films.js";
+import FilmCardView from "./view/film-card.js";
+import ShowMoreView from "./view/show-more.js";
+import MostRecommendedBlockView from "./view/most-recommended-block.js";
+import TopRatedBlockView from "./view/top-rated-block.js";
+import FilmDetailView from "./view/film-details.js";
+import StatisticView from "./view/statistic.js";
 
 import {generateFilm} from "./mock/film.js";
 import {generateFilter} from "./mock/filter.js";
@@ -22,63 +24,113 @@ const mostRecommendedFilms = new Array(MOST_RECOMMENDED_COUNT).fill().map(genera
 const filmsCountInBase = getRandomInteger(10000, 1000000);
 const watchedFilmsCount = getRandomInteger(0, 30);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
+const mainElement = document.querySelector(`.main`);
 const headerElement = document.querySelector(`.header`);
 const footerElement = document.querySelector(`.footer`);
 const footerStatisticElement = footerElement.querySelector(`.footer__statistics`);
-const mainElement = document.querySelector(`.main`);
 
-render(headerElement, createUserProfileBlockTemplate(watchedFilmsCount), `beforeend`);
-render(mainElement, createMainNavigationTemplate(filters), `beforeend`);
-render(mainElement, createSortTemplate(), `beforeend`);
-render(mainElement, createFilmsBlockTemplate(), `beforeend`);
+renderElement(headerElement, new UserProfileBlockView(watchedFilmsCount).getElement(), RenderPosition.BEFOREEND);
+renderElement(mainElement, new FilterView(filters).getElement(), RenderPosition.BEFOREEND);
+renderElement(mainElement, new SortView().getElement(), RenderPosition.BEFOREEND);
 
-const filmsBlockElement = document.querySelector(`.films`);
-const filmsContainerElement = filmsBlockElement.querySelector(`.films-list__container`);
+const renderFilm = (container, film) => {
+  const filmComponent = new FilmCardView(film);
+  const filmDetailComponent = new FilmDetailView(film);
 
-films
-  .slice(0, FILMS_COUNT_PER_STEP)
-  .forEach((film) => render(filmsContainerElement, createFilmCardTemplate(film), `beforeend`));
+  const openFilmDetail = () => {
+    renderElement(footerElement, filmDetailComponent.getElement(), RenderPosition.AFTEREND);
 
-if (films.length > FILMS_COUNT_PER_STEP) {
-  let renderedFilmCount = FILMS_COUNT_PER_STEP;
+    filmDetailComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, () => {
+      closeFilmDetail();
+    });
 
-  render(filmsContainerElement, createShowMoreTemplate(), `afterend`);
+    document.addEventListener(`keydown`, onEscKeyDown);
+  };
 
-  const showMoreFilmsBtn = document.querySelector(`.films-list__show-more`);
+  const closeFilmDetail = () => {
+    filmDetailComponent.getElement().remove();
+    filmDetailComponent.removeElement();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  };
 
-  showMoreFilmsBtn.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-
-    films
-      .slice(renderedFilmCount, renderedFilmCount + FILMS_COUNT_PER_STEP)
-      .forEach((film) => render(filmsContainerElement, createFilmCardTemplate(film), `beforeend`));
-
-    renderedFilmCount += FILMS_COUNT_PER_STEP;
-
-    if (renderedFilmCount >= films.length) {
-      showMoreFilmsBtn.remove();
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      closeFilmDetail();
+      document.removeEventListener(`keydown`, onEscKeyDown);
     }
+  };
+
+  filmComponent.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, () => {
+    openFilmDetail();
   });
-}
 
-render(filmsBlockElement, createTopRatedBlockTemplate(), `beforeend`);
-render(filmsBlockElement, createMostRecommendedBlockTemplate(), `beforeend`);
+  filmComponent.getElement().querySelector(`.film-card__title`).addEventListener(`click`, () => {
+    openFilmDetail();
+  });
 
-const [topRatedContainerElement, mostRecommendedContainerElement] = filmsBlockElement.querySelectorAll(`.films-list--extra`);
+  filmComponent.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, () => {
+    openFilmDetail();
+  });
 
-const topRatedFilmsElement = topRatedContainerElement.querySelector(`.films-list__container`);
-for (let i = 0, len = topRatedFilms.length; i < len; i++) {
-  render(topRatedFilmsElement, createFilmCardTemplate(topRatedFilms[i]), `beforeend`);
-}
+  renderElement(container, filmComponent.getElement(), RenderPosition.BEFOREEND);
+};
 
-const mostRecommendedFilmsElement = mostRecommendedContainerElement.querySelector(`.films-list__container`);
-for (let i = 0, len = mostRecommendedFilms.length; i < len; i++) {
-  render(mostRecommendedFilmsElement, createFilmCardTemplate(mostRecommendedFilms[i]), `beforeend`);
-}
+const renderFilmsBoard = (boardContainer, boardFilms, boardTopRatedFilms = [], boardMostRecommendedFilms = []) => {
+  const filmsBlockComponent = new FilmsBlockView();
+  const filmsListComponent = new FilmsListView();
+  const filmsComponent = new FilmsView();
 
-render(footerStatisticElement, createStatisticTemplate(filmsCountInBase), `beforeend`);
-render(footerElement, createFilmDetailsTemplate(films[0]), `afterend`);
+  renderElement(boardContainer, filmsBlockComponent.getElement(), RenderPosition.BEFOREEND);
+  renderElement(filmsBlockComponent.getElement(), filmsListComponent.getElement(), RenderPosition.BEFOREEND);
+  renderElement(filmsListComponent.getElement(), filmsComponent.getElement(), RenderPosition.BEFOREEND);
+
+  boardFilms
+    .slice(0, FILMS_COUNT_PER_STEP)
+    .forEach((film) => renderFilm(filmsComponent.getElement(), film));
+
+  if (boardFilms.length > FILMS_COUNT_PER_STEP) {
+    let renderedFilmCount = FILMS_COUNT_PER_STEP;
+
+    const showMoreFilmsBtn = new ShowMoreView();
+    renderElement(filmsComponent.getElement(), showMoreFilmsBtn.getElement(), RenderPosition.AFTEREND);
+
+    showMoreFilmsBtn.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      boardFilms
+        .slice(renderedFilmCount, renderedFilmCount + FILMS_COUNT_PER_STEP)
+        .forEach((film) => renderFilm(filmsComponent.getElement(), film));
+
+      renderedFilmCount += FILMS_COUNT_PER_STEP;
+
+      if (renderedFilmCount >= boardFilms.length) {
+        showMoreFilmsBtn.remove();
+      }
+    });
+  }
+
+  if (boardTopRatedFilms) {
+    const topRatedFilmsComponent = new TopRatedBlockView();
+    renderElement(filmsBlockComponent.getElement(), topRatedFilmsComponent.getElement(), RenderPosition.BEFOREEND);
+
+    const topRatedFilmsElement = topRatedFilmsComponent.getElement().querySelector(`.films-list__container`);
+    boardTopRatedFilms
+      .slice()
+      .forEach((film) => renderFilm(topRatedFilmsElement, film));
+  }
+
+  if (boardMostRecommendedFilms) {
+    const moreRecommendedFilmsComponent = new MostRecommendedBlockView();
+    renderElement(filmsBlockComponent.getElement(), moreRecommendedFilmsComponent.getElement(), RenderPosition.BEFOREEND);
+
+    const mostRecommendedFilmsElement = moreRecommendedFilmsComponent.getElement().querySelector(`.films-list__container`);
+    boardMostRecommendedFilms
+      .slice()
+      .forEach((film) => renderFilm(mostRecommendedFilmsElement, film));
+  }
+};
+
+renderFilmsBoard(mainElement, films, topRatedFilms, mostRecommendedFilms);
+
+renderElement(footerStatisticElement, new StatisticView(filmsCountInBase).getElement(), RenderPosition.BEFOREEND);

@@ -112,10 +112,11 @@ const generatePeople = (limit) => {
 
 export const generateFilm = () => {
   const name = generateName();
+  const poster = generatePoster();
 
   return {
-    poster: generatePoster(),
-    fullPoster: generatePoster(),
+    poster,
+    fullPoster: poster,
     name,
     originalName: name,
     producer: generateProducer(),
