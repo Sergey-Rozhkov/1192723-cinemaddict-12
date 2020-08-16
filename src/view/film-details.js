@@ -1,9 +1,22 @@
-import {humanizeCommentDate, humanizeFilmReleaseDate, createElement} from "../utils";
+import AbstractView from "./abstract.js";
+import {humanizeCommentDate, humanizeFilmReleaseDate} from "../utils/film.js";
 
-export default class FilmDetail {
+export default class FilmDetail extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+
+    this._closePopupFilmDetailHandler = this._closePopupFilmDetailHandler.bind(this);
+  }
+
+  _closePopupFilmDetailHandler() {
+    this._callback.closeFilmDetail();
+  }
+
+  setClosePopupFilmDetailHandler(callback) {
+    this._callback.closeFilmDetail = callback;
+
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closePopupFilmDetailHandler);
   }
 
   _createFilmDetailGenres(genres) {
@@ -157,18 +170,6 @@ export default class FilmDetail {
         </form>
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

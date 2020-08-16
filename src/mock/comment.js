@@ -1,4 +1,5 @@
-import {getRandomElements, getRandomInteger, generateDate} from "../utils";
+import {generateDate} from "../utils/common.js";
+import {getRandomElements, getRandomInteger} from "../utils/common.js";
 
 const emotions = [
   `smile`,

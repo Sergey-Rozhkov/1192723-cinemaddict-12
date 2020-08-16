@@ -1,10 +1,6 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-export default class MostRecommendedBlock {
-  constructor() {
-    this._element = null;
-  }
-
+export default class MostRecommendedBlock extends AbstractView {
   getTemplate() {
     return (
       `<section class="films-list--extra">
@@ -13,18 +9,6 @@ export default class MostRecommendedBlock {
         <div class="films-list__container"></div>
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

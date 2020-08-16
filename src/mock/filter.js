@@ -1,4 +1,4 @@
-import {isFilmInWatchlist, isFilmInHistory, isFilmInFavorite} from "../utils.js";
+import {isFilmInWatchlist, isFilmInHistory, isFilmInFavorite} from "../utils/film.js";
 
 const filmToFilterMap = {
   all: {
