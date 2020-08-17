@@ -1,11 +1,26 @@
+import AbstractView from "./abstract.js";
 import {MAX_FILM_DESCRIPTION_LENGTH, FILM_DESCRIPTION_AFTER_SIGN} from "../const.js";
-import {humanizeFilmReleaseYear, createElement} from "../utils.js";
+import {humanizeFilmReleaseYear} from "../utils/film.js";
 
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+
+    this._openPopupFilmDetailHandler = this._openPopupFilmDetailHandler.bind(this);
+  }
+
+  _openPopupFilmDetailHandler() {
+    this._callback.openFilmDetail();
+  }
+
+  setOpenPopupFilmDetailHandler(callback) {
+    this._callback.openFilmDetail = callback;
+
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, this._openPopupFilmDetailHandler);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, this._openPopupFilmDetailHandler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, this._openPopupFilmDetailHandler);
   }
 
   getTemplate() {
@@ -37,18 +52,6 @@ export default class FilmCard {
         </form>
       </article>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

@@ -1,9 +1,9 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-export default class UserProfileBlock {
+export default class UserProfileBlock extends AbstractView {
   constructor(filmsCount) {
+    super();
     this._filmsCount = filmsCount;
-    this._element = null;
   }
 
   getTemplate() {
@@ -24,18 +24,6 @@ export default class UserProfileBlock {
         <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

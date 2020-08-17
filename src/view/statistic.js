@@ -1,9 +1,9 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-export default class StatisticView {
+export default class StatisticView extends AbstractView {
   constructor(count) {
+    super();
     this._count = count;
-    this._element = null;
   }
 
   getTemplate() {
@@ -11,18 +11,6 @@ export default class StatisticView {
     return (
       `<p>${formattedCount} movies inside</p>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

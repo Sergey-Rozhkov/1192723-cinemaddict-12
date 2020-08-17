@@ -1,26 +1,10 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
-export default class FilmListTitle {
-  constructor() {
-    this._element = null;
-  }
-
+export default class FilmListTitle extends AbstractView {
   getTemplate() {
     return (
       `<h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
