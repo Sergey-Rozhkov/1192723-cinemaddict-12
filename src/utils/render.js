@@ -4,6 +4,7 @@ export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
   AFTEREND: `afterend`,
+  BEFORE: `before`
 };
 
 export const renderElement = (container, child, place) => {
@@ -24,6 +25,9 @@ export const renderElement = (container, child, place) => {
       break;
     case RenderPosition.AFTEREND:
       container.parentNode.insertBefore(child, container.nextSibling);
+      break;
+    case RenderPosition.BEFORE:
+      container.parentNode.insertBefore(child, container);
       break;
   }
 };
