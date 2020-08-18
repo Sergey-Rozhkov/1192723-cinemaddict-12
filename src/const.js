@@ -10,3 +10,10 @@ export const SORT_TYPE = {
   DATE: `date`,
   RATING: `rating`
 };
+export const DATE_LOCALE = `en-US`;
+export const RENDER_POSITION = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  AFTEREND: `afterend`,
+  BEFORE: `before`
+};

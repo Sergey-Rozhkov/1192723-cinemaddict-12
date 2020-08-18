@@ -1,10 +1,12 @@
+import {DATE_LOCALE} from "../const.js";
+
 export const humanizeFilmReleaseYear = (date) => {
-  return date.toLocaleString(`en-US`, {year: `numeric`});
+  return date.toLocaleString(DATE_LOCALE, {year: `numeric`});
 };
 
 export const humanizeFilmReleaseDate = (date) => {
   const day = (`0` + date.getDate()).slice(-2);
-  const month = date.toLocaleString(`en-US`, {month: `long`});
+  const month = date.toLocaleString(DATE_LOCALE, {month: `long`});
   return `${day} ${month} ${date.getFullYear()}`;
 };
 

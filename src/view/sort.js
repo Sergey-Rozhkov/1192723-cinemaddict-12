@@ -24,13 +24,17 @@ export default class SortView extends AbstractView {
     this.getElement().addEventListener(`click`, this._sortTypeChangeHandler);
   }
 
+  _isActiveSort(type) {
+    return this._sortType === type;
+  }
+
   getTemplate() {
     const activeClass = `sort__button--active`;
     return (
       `<ul class="sort">
-        <li><a href="#" class="sort__button ${this._sortType === SORT_TYPE.DEFAULT ? activeClass : ``}" data-sort-type="${SORT_TYPE.DEFAULT}">Sort by default</a></li>
-        <li><a href="#" class="sort__button ${this._sortType === SORT_TYPE.DATE ? activeClass : ``}" data-sort-type="${SORT_TYPE.DATE}">Sort by date</a></li>
-        <li><a href="#" class="sort__button ${this._sortType === SORT_TYPE.RATING ? activeClass : ``}" data-sort-type="${SORT_TYPE.RATING}">Sort by rating</a></li>
+        <li><a href="#" class="sort__button ${this._isActiveSort(SORT_TYPE.DEFAULT) ? activeClass : ``}" data-sort-type="${SORT_TYPE.DEFAULT}">Sort by default</a></li>
+        <li><a href="#" class="sort__button ${this._isActiveSort(SORT_TYPE.DATE) ? activeClass : ``}" data-sort-type="${SORT_TYPE.DATE}">Sort by date</a></li>
+        <li><a href="#" class="sort__button ${this._isActiveSort(SORT_TYPE.RATING) ? activeClass : ``}" data-sort-type="${SORT_TYPE.RATING}">Sort by rating</a></li>
       </ul>`
     );
   }
