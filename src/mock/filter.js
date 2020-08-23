@@ -1,4 +1,4 @@
-import {isFilmInWatchlist, isFilmInHistory, isFilmInFavorite} from "../utils/film.js";
+import {isFilmInWatchlist, isFilmAlreadyWatched, isFilmInFavorite} from "../utils/film.js";
 
 const filmToFilterMap = {
   all: {
@@ -13,7 +13,7 @@ const filmToFilterMap = {
   history: {
     title: `History`,
     func: (films) => films
-      .filter((film) => isFilmInHistory(film)).length
+      .filter((film) => isFilmAlreadyWatched(film)).length
   },
   favorites: {
     title: `Favorites`,

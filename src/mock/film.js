@@ -69,6 +69,8 @@ const people = [
   `Cameron Owens`
 ];
 
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
 const generateName = () => {
   return getRandomElement(names);
 };
@@ -116,6 +118,7 @@ export const generateFilm = () => {
   const poster = generatePoster();
 
   return {
+    id: generateId(),
     poster,
     fullPoster: poster,
     name,
@@ -132,8 +135,8 @@ export const generateFilm = () => {
     description: generateDescription(20),
     comments: generateComments(getRandomInteger(0, 5)),
     ageRating: getRandomInteger(0, 18),
-    inWishlist: Boolean(getRandomInteger(0, 1)),
-    inHistory: Boolean(getRandomInteger(0, 1)),
+    inWatchlist: Boolean(getRandomInteger(0, 1)),
+    isAlreadyWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
   };
 };

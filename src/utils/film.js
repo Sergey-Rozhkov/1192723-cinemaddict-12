@@ -19,11 +19,11 @@ export const humanizeCommentDate = (date) => {
 };
 
 export const isFilmInWatchlist = (film) => {
-  return film.inWishlist;
+  return film.inWatchlist;
 };
 
-export const isFilmInHistory = (film) => {
-  return film.inHistory;
+export const isFilmAlreadyWatched = (film) => {
+  return film.isAlreadyWatched;
 };
 
 export const isFilmInFavorite = (film) => {
