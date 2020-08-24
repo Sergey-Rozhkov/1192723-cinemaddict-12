@@ -1,12 +1,54 @@
-import AbstractView from "./abstract.js";
-import {humanizeCommentDate, humanizeFilmReleaseDate} from "../utils/film.js";
+import SmartView from "./smart";
+import {humanizeCommentDate, humanizeFilmReleaseDate} from "../utils/film";
+import {EMOJI_WIDTH, EMOJI_HEIGHT} from "../const";
 
-export default class FilmDetail extends AbstractView {
+export default class FilmDetail extends SmartView {
   constructor(film) {
     super();
     this._film = film;
+    this._data = FilmDetail.parseFilmToData(film);
 
     this._closePopupFilmDetailHandler = this._closePopupFilmDetailHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._alreadyWatchClickHandler = this._alreadyWatchClickHandler.bind(this);
+    this._inWatchlistClickHandler = this._inWatchlistClickHandler.bind(this);
+    this._emotionClickHandler = this._emotionClickHandler.bind(this);
+
+    this._setInnerHandlers();
+  }
+
+  _setInnerHandlers() {
+    const emoji = this.getElement()
+      .querySelectorAll(`.film-details__emoji-label`);
+
+    emoji.forEach((element) => {
+      element.addEventListener(`click`, this._emotionClickHandler);
+    });
+  }
+
+  _emotionClickHandler(evt) {
+    const emojiBlockElement = evt.currentTarget.closest(`.film-details__new-comment`).querySelector(`.film-details__add-emoji-label`);
+    let img = document.createElement(`img`);
+    img.width = EMOJI_WIDTH;
+    img.heigth = EMOJI_HEIGHT;
+    img.src = evt.currentTarget.querySelector(`img`).src;
+    emojiBlockElement.innerHTML = ``;
+    emojiBlockElement.append(img);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  _alreadyWatchClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchClick();
+  }
+
+  _inWatchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.inWatchlistClick();
   }
 
   _closePopupFilmDetailHandler() {
@@ -18,6 +60,22 @@ export default class FilmDetail extends AbstractView {
 
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closePopupFilmDetailHandler);
   }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  setAlreadyWatchClickHandler(callback) {
+    this._callback.alreadyWatchClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._alreadyWatchClickHandler);
+  }
+
+  setInWatchlistClickHandler(callback) {
+    this._callback.inWatchlistClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._inWatchlistClickHandler);
+  }
+
 
   _createFilmDetailGenres(genres) {
     return (`
@@ -51,8 +109,23 @@ export default class FilmDetail extends AbstractView {
     `);
   }
 
+  static parseFilmToData(film) {
+    return Object.assign(
+        {},
+        film
+    );
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setClosePopupFilmDetailHandler(this._callback.closeFilmDetail);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setAlreadyWatchClickHandler(this._callback.alreadyWatchClick);
+    this.setInWatchlistClickHandler(this._callback.inWatchlistClick);
+  }
+
   getTemplate() {
-    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, comments, duration, rating} = this._film;
+    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._data;
 
     const writersText = writers.join(`, `);
     const actorsText = actors.join(`, `);
@@ -119,13 +192,13 @@ export default class FilmDetail extends AbstractView {
             </div>
 
             <section class="film-details__controls">
-              <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+              <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${inWatchlist ? `checked` : ``}>
               <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-              <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+              <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isAlreadyWatched ? `checked` : ``}>
               <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-              <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+              <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
               <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
             </section>
           </div>

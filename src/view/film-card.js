@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import AbstractView from "./abstract";
 import {MAX_FILM_DESCRIPTION_LENGTH, FILM_DESCRIPTION_AFTER_SIGN} from "../const.js";
 import {humanizeFilmReleaseYear} from "../utils/film.js";
 
@@ -7,8 +7,27 @@ export default class FilmCard extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
+    this._data = FilmCard.parseFilmToData(film);
 
     this._openPopupFilmDetailHandler = this._openPopupFilmDetailHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._alreadyWatchClickHandler = this._alreadyWatchClickHandler.bind(this);
+    this._inWatchlistClickHandler = this._inWatchlistClickHandler.bind(this);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  _alreadyWatchClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchClick();
+  }
+
+  _inWatchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.inWatchlistClick();
   }
 
   _openPopupFilmDetailHandler() {
@@ -23,8 +42,36 @@ export default class FilmCard extends AbstractView {
     this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, this._openPopupFilmDetailHandler);
   }
 
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  setAlreadyWatchClickHandler(callback) {
+    this._callback.alreadyWatchClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, this._alreadyWatchClickHandler);
+  }
+
+  setInWatchlistClickHandler(callback) {
+    this._callback.inWatchlistClick = callback;
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, this._inWatchlistClickHandler);
+  }
+
+  static parseFilmToData(film) {
+    return Object.assign(
+        {},
+        film
+    );
+  }
+
+  static parseDataToFilm(data) {
+    data = Object.assign({}, data);
+
+    return data;
+  }
+
   getTemplate() {
-    const {name, poster, date, genres, shortDescription, comments, duration, rating} = this._film;
+    const {name, poster, date, genres, shortDescription, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._data;
     const filmGenres = genres.join(`, `);
 
     const filmDate = humanizeFilmReleaseYear(date);
@@ -46,9 +93,9 @@ export default class FilmCard extends AbstractView {
         <p class="film-card__description">${description}</p>
         <a class="film-card__comments">${comments.length} comments</a>
         <form class="film-card__controls">
-          <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-          <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-          <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+          <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${inWatchlist ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
+          <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isAlreadyWatched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
+          <button class="film-card__controls-item button film-card__controls-item--favorite ${isFavorite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
         </form>
       </article>`
     );

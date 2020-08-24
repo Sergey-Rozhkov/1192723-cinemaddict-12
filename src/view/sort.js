@@ -1,11 +1,11 @@
 import AbstractView from "./abstract.js";
-import {SORT_TYPE} from "../const.js";
+import {SortType} from "../const.js";
 
 export default class SortView extends AbstractView {
   constructor() {
     super();
 
-    this._sortType = SORT_TYPE.DEFAULT;
+    this._sortType = SortType.DEFAULT;
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
@@ -32,9 +32,9 @@ export default class SortView extends AbstractView {
     const activeClass = `sort__button--active`;
     return (
       `<ul class="sort">
-        <li><a href="#" class="sort__button ${this._isActiveSort(SORT_TYPE.DEFAULT) ? activeClass : ``}" data-sort-type="${SORT_TYPE.DEFAULT}">Sort by default</a></li>
-        <li><a href="#" class="sort__button ${this._isActiveSort(SORT_TYPE.DATE) ? activeClass : ``}" data-sort-type="${SORT_TYPE.DATE}">Sort by date</a></li>
-        <li><a href="#" class="sort__button ${this._isActiveSort(SORT_TYPE.RATING) ? activeClass : ``}" data-sort-type="${SORT_TYPE.RATING}">Sort by rating</a></li>
+        <li><a href="#" class="sort__button ${this._isActiveSort(SortType.DEFAULT) ? activeClass : ``}" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
+        <li><a href="#" class="sort__button ${this._isActiveSort(SortType.DATE) ? activeClass : ``}" data-sort-type="${SortType.DATE}">Sort by date</a></li>
+        <li><a href="#" class="sort__button ${this._isActiveSort(SortType.RATING) ? activeClass : ``}" data-sort-type="${SortType.RATING}">Sort by rating</a></li>
       </ul>`
     );
   }
