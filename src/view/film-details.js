@@ -1,5 +1,5 @@
 import SmartView from "./smart";
-import {humanizeCommentDate, humanizeFilmReleaseDate} from "../utils/film";
+import {humanizeCommentDate, formatFilmDetailReleaseDate, formatFilmDuration} from "../utils/film";
 import {EMOJI_WIDTH, EMOJI_HEIGHT} from "../const";
 
 export default class FilmDetail extends SmartView {
@@ -172,11 +172,11 @@ export default class FilmDetail extends SmartView {
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">Release Date</td>
-                    <td class="film-details__cell">${humanizeFilmReleaseDate(date)}</td>
+                    <td class="film-details__cell">${formatFilmDetailReleaseDate(date)}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">Runtime</td>
-                    <td class="film-details__cell">${duration}</td>
+                    <td class="film-details__cell">${formatFilmDuration(duration)}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">Country</td>

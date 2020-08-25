@@ -1,5 +1,6 @@
-import {generateDate} from "../utils/common.js";
-import {getRandomElements, getRandomInteger} from "../utils/common.js";
+import {generateDate} from "../utils/common";
+import {getRandomElements, getRandomInteger} from "../utils/common";
+import {MAX_DAY_GAP} from "../const";
 
 const emotions = [
   `smile`,
@@ -54,7 +55,7 @@ const generateComment = () => {
     text: generateText(),
     emotion: generateEmotion(),
     author: generateAuthor(),
-    date: generateDate(),
+    date: generateDate(-MAX_DAY_GAP, 0),
   };
 };
 

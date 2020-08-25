@@ -1,6 +1,6 @@
-import {generateDate} from "../utils/common.js";
-import {getRandomElements, getRandomElement, getRandomInteger, getRandomFloat} from "../utils/common.js";
-import {generateComments} from "./comment.js";
+import {generateDate, getRandomElements, getRandomElement, getRandomInteger, getRandomFloat} from "../utils/common";
+import {generateComments} from "./comment";
+import {MIN_MOCK_FILM_DURATION, MAX_MOCK_FILM_DURATION} from "../const";
 
 const names = [
   `The Dance of Life`,
@@ -100,7 +100,7 @@ const generateDescription = (limit) => {
 };
 
 const generateDuration = () => {
-  return `${getRandomInteger(1, 2)}h ${getRandomInteger(1, 59)}m`;
+  return getRandomInteger(MIN_MOCK_FILM_DURATION, MAX_MOCK_FILM_DURATION);
 };
 
 const generateProducer = () => {

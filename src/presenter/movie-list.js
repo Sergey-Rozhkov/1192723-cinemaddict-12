@@ -1,17 +1,17 @@
-import Film from "../presenter/film";
+import FilmPresenter from "../presenter/film";
 import FilmsBlockView from "../view/films-block";
 import FilmsListView from "../view/film-list";
 import FilmsView from "../view/films";
-import {renderElement, removeElement} from "../utils/render";
 import FilmsListNoDataView from "../view/film-list-no-data";
 import FilmsListTitleView from "../view/film-list-title";
-import {FILMS_COUNT_PER_STEP, SortType, RenderPosition} from "../const";
 import SortView from "../view/sort";
 import ShowMoreView from "../view/show-more";
 import TopRatedBlockView from "../view/top-rated-block";
 import MostRecommendedBlockView from "../view/most-recommended-block";
+import {renderElement, removeElement} from "../utils/render";
 import {updateItem} from "../utils/common";
 import {sortFilmsByDate, sortFilmsByRating} from "../utils/film";
+import {FILMS_COUNT_PER_STEP, SortType, RenderPosition} from "../const";
 
 export default class MovieList {
   constructor(boardContainer) {
@@ -108,7 +108,7 @@ export default class MovieList {
   }
 
   _renderFilm(film, container = this._filmsComponent) {
-    const filmPresenter = new Film(container, this._handleFilmChange, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(container, this._handleFilmChange, this._handleModeChange);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
