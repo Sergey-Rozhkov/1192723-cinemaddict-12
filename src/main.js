@@ -1,15 +1,15 @@
-import {FILMS_CARD_COUNT, TOP_RATED_COUNT, MOST_RECOMMENDED_COUNT, RenderPosition} from "./const.js";
-import {renderElement} from "./utils/render.js";
-import {getRandomInteger} from "./utils/common.js";
+import {FILMS_CARD_COUNT, TOP_RATED_COUNT, MOST_RECOMMENDED_COUNT, RenderPosition} from "./const";
+import {renderElement} from "./utils/render";
+import {getRandomInteger} from "./utils/common";
 
-import UserProfileBlockView from "./view/user-profile-block.js";
-import FilterView from "./view/filter.js";
-import StatisticView from "./view/statistic.js";
+import UserProfileBlockView from "./view/user-profile-block";
+import FilterView from "./view/filter";
+import StatisticView from "./view/statistic";
 
-import {generateFilm} from "./mock/film.js";
-import {generateFilter} from "./mock/filter.js";
+import {generateFilm} from "./mock/film";
+import {generateFilter} from "./mock/filter";
 
-import MovieListPresenter from "./presenter/movie-list.js";
+import MovieListPresenter from "./presenter/movie-list";
 
 const films = new Array(FILMS_CARD_COUNT).fill().map(generateFilm);
 const filters = generateFilter(films);

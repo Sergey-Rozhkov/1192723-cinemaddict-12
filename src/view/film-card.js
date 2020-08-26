@@ -1,6 +1,6 @@
 import AbstractView from "./abstract";
-import {MAX_FILM_DESCRIPTION_LENGTH, FILM_DESCRIPTION_AFTER_SIGN} from "../const.js";
-import {humanizeFilmReleaseYear} from "../utils/film.js";
+import {MAX_FILM_DESCRIPTION_LENGTH, FILM_DESCRIPTION_AFTER_SIGN} from "../const";
+import {formatFilmReleaseDate, formatFilmDuration} from "../utils/film";
 
 
 export default class FilmCard extends AbstractView {
@@ -74,7 +74,7 @@ export default class FilmCard extends AbstractView {
     const {name, poster, date, genres, shortDescription, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._data;
     const filmGenres = genres.join(`, `);
 
-    const filmDate = humanizeFilmReleaseYear(date);
+    const filmDate = formatFilmReleaseDate(date);
 
     const description = shortDescription.length > MAX_FILM_DESCRIPTION_LENGTH
       ? shortDescription.substring(0, MAX_FILM_DESCRIPTION_LENGTH - 2) + FILM_DESCRIPTION_AFTER_SIGN
@@ -86,7 +86,7 @@ export default class FilmCard extends AbstractView {
         <p class="film-card__rating">${rating}</p>
         <p class="film-card__info">
           <span class="film-card__year">${filmDate}</span>
-          <span class="film-card__duration">${duration}</span>
+          <span class="film-card__duration">${formatFilmDuration(duration)}</span>
           <span class="film-card__genre">${filmGenres}</span>
         </p>
         <img src="${poster}" alt="Film ${name}" class="film-card__poster">

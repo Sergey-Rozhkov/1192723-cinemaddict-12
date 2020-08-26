@@ -10,7 +10,6 @@ export const SortType = {
   DATE: `date`,
   RATING: `rating`
 };
-export const DATE_LOCALE = `en-US`;
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`,
@@ -23,3 +22,5 @@ export const Mode = {
 };
 export const EMOJI_WIDTH = 55;
 export const EMOJI_HEIGHT = 55;
+export const MIN_MOCK_FILM_DURATION = 80;
+export const MAX_MOCK_FILM_DURATION = 150;

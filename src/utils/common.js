@@ -1,4 +1,4 @@
-import {MAX_DAY_GAP} from "../const.js";
+import {MAX_DAY_GAP} from "../const";
 
 export const getRandomInteger = (from = 0, to = 1) => {
   const lower = Math.ceil(Math.min(from, to));
@@ -31,8 +31,8 @@ export const getRandomElement = (data) => {
   return data[randomIndex];
 };
 
-export const generateDate = () => {
-  const daysGap = getRandomInteger(-MAX_DAY_GAP, MAX_DAY_GAP);
+export const generateDate = (start = -MAX_DAY_GAP, to = MAX_DAY_GAP) => {
+  const daysGap = getRandomInteger(start, to);
   const currentDate = new Date();
 
   currentDate.setHours(getRandomInteger(0, 23), getRandomInteger(0, 59));

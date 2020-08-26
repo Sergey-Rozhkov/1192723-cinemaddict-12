@@ -1,21 +1,36 @@
-import {DATE_LOCALE} from "../const.js";
+import moment from "moment";
 
-export const humanizeFilmReleaseYear = (date) => {
-  return date.toLocaleString(DATE_LOCALE, {year: `numeric`});
+const formatDateByTemplate = (date, format) => {
+  if (!(date instanceof Date)) {
+    return ``;
+  }
+
+  return moment(date).format(format);
 };
 
-export const humanizeFilmReleaseDate = (date) => {
-  const day = (`0` + date.getDate()).slice(-2);
-  const month = date.toLocaleString(DATE_LOCALE, {month: `long`});
-  return `${day} ${month} ${date.getFullYear()}`;
+export const formatFilmReleaseDate = (dueDate) => {
+  return formatDateByTemplate(dueDate, `YYYY`);
+};
+
+export const formatFilmDetailReleaseDate = (date) => {
+  return formatDateByTemplate(date, `DD MMMM YYYY`);
+};
+
+export const formatFilmDuration = (duration) => {
+  if (!duration) {
+    return ``;
+  }
+
+  const momentDuration = moment.duration(duration, `minutes`);
+  return `${momentDuration.hours()}h ${momentDuration.minutes()}m`;
 };
 
 export const humanizeCommentDate = (date) => {
-  const month = (`0` + (date.getMonth() + 1)).slice(-2);
-  const day = (`0` + date.getDate()).slice(-2);
-  const hours = (`0` + date.getHours()).slice(-2);
-  const minutes = (`0` + date.getMinutes()).slice(-2);
-  return `${date.getFullYear()}/${month}/${day} ${hours}:${minutes}`;
+  if (!(date instanceof Date)) {
+    return ``;
+  }
+
+  return moment(date).fromNow();
 };
 
 export const isFilmInWatchlist = (film) => {
