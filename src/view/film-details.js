@@ -13,6 +13,7 @@ export default class FilmDetail extends SmartView {
     this._alreadyWatchClickHandler = this._alreadyWatchClickHandler.bind(this);
     this._inWatchlistClickHandler = this._inWatchlistClickHandler.bind(this);
     this._emotionClickHandler = this._emotionClickHandler.bind(this);
+    this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -23,6 +24,13 @@ export default class FilmDetail extends SmartView {
 
     emoji.forEach((element) => {
       element.addEventListener(`click`, this._emotionClickHandler);
+    });
+
+    const commentDeleteBtnElements = this.getElement()
+      .querySelectorAll(`.film-details__comment-delete`);
+
+    commentDeleteBtnElements.forEach((element) => {
+      element.addEventListener(`click`, this._commentDeleteHandler);
     });
   }
 
@@ -55,6 +63,12 @@ export default class FilmDetail extends SmartView {
     this._callback.closeFilmDetail();
   }
 
+  _commentDeleteHandler(evt) {
+    evt.preventDefault();
+    const commentId = evt.target.dataset.commentId;
+    this._callback.commentDeleteClick(commentId);
+  }
+
   setClosePopupFilmDetailHandler(callback) {
     this._callback.closeFilmDetail = callback;
 
@@ -76,6 +90,10 @@ export default class FilmDetail extends SmartView {
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._inWatchlistClickHandler);
   }
 
+  setCommentDeleteHandler(callback) {
+    this._callback.commentDeleteClick = callback;
+    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._commentDeleteHandler);
+  }
 
   _createFilmDetailGenres(genres) {
     return (`
@@ -100,7 +118,7 @@ export default class FilmDetail extends SmartView {
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${comment.author}</span>
                 <span class="film-details__comment-day">${humanizeCommentDate(comment.date)}</span>
-                <button class="film-details__comment-delete">Delete</button>
+                <button class="film-details__comment-delete" data-comment-id="${comment.id}">Delete</button>
               </p>
             </div>
           </li>`
@@ -122,6 +140,7 @@ export default class FilmDetail extends SmartView {
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setAlreadyWatchClickHandler(this._callback.alreadyWatchClick);
     this.setInWatchlistClickHandler(this._callback.inWatchlistClick);
+    this.setCommentDeleteHandler(this._callback.commentDeleteClick);
   }
 
   getTemplate() {

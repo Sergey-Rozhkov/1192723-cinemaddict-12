@@ -24,3 +24,18 @@ export const EMOJI_WIDTH = 55;
 export const EMOJI_HEIGHT = 55;
 export const MIN_MOCK_FILM_DURATION = 80;
 export const MAX_MOCK_FILM_DURATION = 150;
+export const UserAction = {
+  UPDATE_FILM: `UPDATE_FILM`,
+  DELETE_COMMENT: `DELETE_COMMENT`
+};
+export const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+export const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};

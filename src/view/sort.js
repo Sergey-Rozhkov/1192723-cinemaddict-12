@@ -2,10 +2,10 @@ import AbstractView from "./abstract";
 import {SortType} from "../const";
 
 export default class SortView extends AbstractView {
-  constructor() {
+  constructor(currentSortType) {
     super();
 
-    this._sortType = SortType.DEFAULT;
+    this._sortType = currentSortType;
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 

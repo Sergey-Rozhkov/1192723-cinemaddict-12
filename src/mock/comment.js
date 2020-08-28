@@ -2,6 +2,8 @@ import {generateDate} from "../utils/common";
 import {getRandomElements, getRandomInteger} from "../utils/common";
 import {MAX_DAY_GAP} from "../const";
 
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
 const emotions = [
   `smile`,
   `sleeping`,
@@ -52,6 +54,7 @@ const generateAuthor = () => {
 
 const generateComment = () => {
   return {
+    id: generateId(),
     text: generateText(),
     emotion: generateEmotion(),
     author: generateAuthor(),
