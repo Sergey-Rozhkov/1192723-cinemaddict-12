@@ -1,13 +1,15 @@
 import FilmCardView from "../view/film-card";
 import FilmDetailView from "../view/film-details";
+import CommentsModel from "../model/comments";
 import {renderElement, replaceElement, removeElement} from "../utils/render";
-import {RenderPosition, Mode} from "../const";
+import {RenderPosition, Mode, UserAction, UpdateType} from "../const";
 
 export default class Film {
   constructor(filmListContainer, changeData, changeMode) {
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._commentsModel = new CommentsModel();
 
     this._filmComponent = null;
     this._filmDetailComponent = null;
@@ -20,10 +22,13 @@ export default class Film {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._alreadyWatchClickHandler = this._alreadyWatchClickHandler.bind(this);
     this._inWatchlistClickHandler = this._inWatchlistClickHandler.bind(this);
+
+    this._commentDeleteClickHandler = this._commentDeleteClickHandler.bind(this);
   }
 
   init(film) {
     this._film = film;
+    this._commentsModel.setComments(film.comments);
 
     const prevFilmCardComponent = this._filmComponent;
     const prevFilmDetailComponent = this._filmDetailComponent;
@@ -52,6 +57,7 @@ export default class Film {
 
     if (this._filmListContainer.getElement().contains(prevFilmDetailComponent.getElement())) {
       replaceElement(this._filmDetailComponent, prevFilmDetailComponent);
+      this._filmDetailComponent.setCommentDeleteHandler(this._commentDeleteClickHandler);
       this._filmDetailComponent.setClosePopupFilmDetailHandler(this._closeFilmDetailHandler);
     }
 
@@ -76,8 +82,25 @@ export default class Film {
     this._mode = Mode.CLOSED;
   }
 
+  _commentDeleteClickHandler(commentId) {
+    this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, commentId);
+    this._changeData(
+        UserAction.DELETE_COMMENT,
+        UpdateType.PATCH,
+        Object.assign(
+            {},
+            this._film,
+            {
+              comments: this._commentsModel.getComments()
+            }
+        )
+    );
+  }
+
   _favoriteClickHandler() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -90,6 +113,8 @@ export default class Film {
 
   _inWatchlistClickHandler() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -102,6 +127,8 @@ export default class Film {
 
   _alreadyWatchClickHandler() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -122,6 +149,7 @@ export default class Film {
   _openFilmDetailHandler() {
     renderElement(this._filmListContainer, this._filmDetailComponent, RenderPosition.BEFOREEND);
 
+    this._filmDetailComponent.setCommentDeleteHandler(this._commentDeleteClickHandler);
     this._filmDetailComponent.setClosePopupFilmDetailHandler(this._closeFilmDetailHandler);
     this._filmDetailComponent.restoreHandlers();
 

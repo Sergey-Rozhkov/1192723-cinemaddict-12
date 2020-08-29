@@ -3,16 +3,23 @@ import {renderElement} from "./utils/render";
 import {getRandomInteger} from "./utils/common";
 
 import UserProfileBlockView from "./view/user-profile-block";
-import FilterView from "./view/filter";
 import StatisticView from "./view/statistic";
 
 import {generateFilm} from "./mock/film";
-import {generateFilter} from "./mock/filter";
 
 import MovieListPresenter from "./presenter/movie-list";
+import FilterPresenter from "./presenter/filter";
+import FilmsModel from "./model/films";
+import FilterModel from "./model/filter";
+
 
 const films = new Array(FILMS_CARD_COUNT).fill().map(generateFilm);
-const filters = generateFilter(films);
+
+const filmsModel = new FilmsModel();
+filmsModel.setFilms(films);
+
+const filterModel = new FilterModel();
+
 const topRatedFilms = new Array(TOP_RATED_COUNT).fill().map(generateFilm);
 const mostRecommendedFilms = new Array(MOST_RECOMMENDED_COUNT).fill().map(generateFilm);
 const filmsCountInBase = getRandomInteger(10000, 1000000);
@@ -25,8 +32,10 @@ const footerStatisticElement = footerElement.querySelector(`.footer__statistics`
 
 renderElement(headerElement, new UserProfileBlockView(watchedFilmsCount), RenderPosition.BEFOREEND);
 
-const movieListPresenter = new MovieListPresenter(mainElement);
-movieListPresenter.init(films, topRatedFilms, mostRecommendedFilms);
-renderElement(mainElement, new FilterView(filters), RenderPosition.AFTERBEGIN);
+const movieListPresenter = new MovieListPresenter(mainElement, filmsModel, filterModel);
+const filterPresenter = new FilterPresenter(mainElement, filterModel, filmsModel);
+movieListPresenter.init(topRatedFilms, mostRecommendedFilms);
+filterPresenter.init();
+
 
 renderElement(footerStatisticElement, new StatisticView(filmsCountInBase), RenderPosition.BEFOREEND);
