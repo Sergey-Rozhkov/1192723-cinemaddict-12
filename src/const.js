@@ -26,7 +26,9 @@ export const MIN_MOCK_FILM_DURATION = 80;
 export const MAX_MOCK_FILM_DURATION = 150;
 export const UserAction = {
   UPDATE_FILM: `UPDATE_FILM`,
-  DELETE_COMMENT: `DELETE_COMMENT`
+  DELETE_COMMENT: `DELETE_COMMENT`,
+  ADD_COMMENT: `ADD_COMMENT`,
+  CHANGE_MODE: `CHANGE_MODE`
 };
 export const UpdateType = {
   PATCH: `PATCH`,
@@ -38,4 +40,11 @@ export const FilterType = {
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`
+};
+export const FILM_DETAIL_RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
+export const FILM_PREVIEW_RELEASE_DATE_FORMAT = `YYYY`;
+
+export const PageMode = {
+  FILMS: `FILMS`,
+  STATISTICS: `STATISTICS`
 };

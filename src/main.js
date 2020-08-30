@@ -7,11 +7,12 @@ import StatisticView from "./view/statistic";
 
 import {generateFilm} from "./mock/film";
 
+import AppPageModePresenter from "./presenter/page-mode";
 import MovieListPresenter from "./presenter/movie-list";
 import FilterPresenter from "./presenter/filter";
 import FilmsModel from "./model/films";
 import FilterModel from "./model/filter";
-
+import AppPageModeModel from "./model/page-mode";
 
 const films = new Array(FILMS_CARD_COUNT).fill().map(generateFilm);
 
@@ -32,10 +33,14 @@ const footerStatisticElement = footerElement.querySelector(`.footer__statistics`
 
 renderElement(headerElement, new UserProfileBlockView(watchedFilmsCount), RenderPosition.BEFOREEND);
 
-const movieListPresenter = new MovieListPresenter(mainElement, filmsModel, filterModel);
-const filterPresenter = new FilterPresenter(mainElement, filterModel, filmsModel);
-movieListPresenter.init(topRatedFilms, mostRecommendedFilms);
+const pageModeModel = new AppPageModeModel();
+
+const movieListPresenter = new MovieListPresenter(mainElement, filmsModel, filterModel, pageModeModel);
+const filterPresenter = new FilterPresenter(mainElement, filterModel, filmsModel, pageModeModel);
+movieListPresenter.init(true, topRatedFilms, mostRecommendedFilms);
 filterPresenter.init();
 
+const appPageModePresenter = new AppPageModePresenter(mainElement, filmsModel, pageModeModel, movieListPresenter);
+appPageModePresenter.init();
 
 renderElement(footerStatisticElement, new StatisticView(filmsCountInBase), RenderPosition.BEFOREEND);

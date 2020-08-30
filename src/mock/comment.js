@@ -52,7 +52,7 @@ const generateAuthor = () => {
   return authors[randomIndex];
 };
 
-const generateComment = () => {
+export const generateComment = () => {
   return {
     id: generateId(),
     text: generateText(),

@@ -3,6 +3,7 @@ import FilmDetailView from "../view/film-details";
 import CommentsModel from "../model/comments";
 import {renderElement, replaceElement, removeElement} from "../utils/render";
 import {RenderPosition, Mode, UserAction, UpdateType} from "../const";
+import {generateComment} from "..//mock/comment";
 
 export default class Film {
   constructor(filmListContainer, changeData, changeMode) {
@@ -24,6 +25,7 @@ export default class Film {
     this._inWatchlistClickHandler = this._inWatchlistClickHandler.bind(this);
 
     this._commentDeleteClickHandler = this._commentDeleteClickHandler.bind(this);
+    this._commentCtrlEnterAddHandler = this._commentCtrlEnterAddHandler.bind(this);
   }
 
   init(film) {
@@ -58,6 +60,7 @@ export default class Film {
     if (this._filmListContainer.getElement().contains(prevFilmDetailComponent.getElement())) {
       replaceElement(this._filmDetailComponent, prevFilmDetailComponent);
       this._filmDetailComponent.setCommentDeleteHandler(this._commentDeleteClickHandler);
+      this._filmDetailComponent.setCommentAddHandler(this._commentCtrlEnterAddHandler);
       this._filmDetailComponent.setClosePopupFilmDetailHandler(this._closeFilmDetailHandler);
     }
 
@@ -86,6 +89,30 @@ export default class Film {
     this._commentsModel.deleteComment(UserAction.DELETE_COMMENT, commentId);
     this._changeData(
         UserAction.DELETE_COMMENT,
+        UpdateType.PATCH,
+        Object.assign(
+            {},
+            this._film,
+            {
+              comments: this._commentsModel.getComments()
+            }
+        )
+    );
+  }
+
+  _commentCtrlEnterAddHandler(update) {
+    const comment = generateComment();
+
+    this._commentsModel.addComment(UserAction.ADD_COMMENT,
+        Object.assign(
+            {},
+            comment,
+            update
+        )
+    );
+
+    this._changeData(
+        UserAction.ADD_COMMENT,
         UpdateType.PATCH,
         Object.assign(
             {},
@@ -150,6 +177,7 @@ export default class Film {
     renderElement(this._filmListContainer, this._filmDetailComponent, RenderPosition.BEFOREEND);
 
     this._filmDetailComponent.setCommentDeleteHandler(this._commentDeleteClickHandler);
+    this._filmDetailComponent.setCommentAddHandler(this._commentCtrlEnterAddHandler);
     this._filmDetailComponent.setClosePopupFilmDetailHandler(this._closeFilmDetailHandler);
     this._filmDetailComponent.restoreHandlers();
 
