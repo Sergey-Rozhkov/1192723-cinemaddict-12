@@ -138,5 +138,6 @@ export const generateFilm = () => {
     inWatchlist: Boolean(getRandomInteger(0, 1)),
     isAlreadyWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
+    watchingDate: generateDate()
   };
 };

@@ -4,7 +4,7 @@ import {PageMode} from "../const.js";
 export default class AppPageMode extends Observer {
   constructor() {
     super();
-    this._pageMode = PageMode.FILMS;
+    this._pageMode = PageMode.FILM_VIEW;
   }
 
   setMode(updateType, mode) {

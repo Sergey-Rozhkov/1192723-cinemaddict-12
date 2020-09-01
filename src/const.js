@@ -45,6 +45,16 @@ export const FILM_DETAIL_RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
 export const FILM_PREVIEW_RELEASE_DATE_FORMAT = `YYYY`;
 
 export const PageMode = {
-  FILMS: `FILMS`,
+  FILM_VIEW: `FILM_VIEW`,
   STATISTICS: `STATISTICS`
 };
+
+export const StatisticPeriods = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+export const BAR_HEIGHT = 50;

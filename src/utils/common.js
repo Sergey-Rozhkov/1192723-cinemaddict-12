@@ -1,5 +1,9 @@
 import {MAX_DAY_GAP} from "../const";
 
+export const getCurrentDate = () => {
+  return new Date();
+};
+
 export const getRandomInteger = (from = 0, to = 1) => {
   const lower = Math.ceil(Math.min(from, to));
   const upper = Math.floor(Math.max(from, to));

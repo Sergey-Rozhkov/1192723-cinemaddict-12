@@ -49,8 +49,8 @@ export default class Filter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._pageModeModel.getMode() !== PageMode.FILMS) {
-      this._pageModeModel.setMode(UserAction.CHANGE_MODE, PageMode.FILMS);
+    if (this._pageModeModel.getMode() !== PageMode.FILM_VIEW) {
+      this._pageModeModel.setMode(UserAction.CHANGE_MODE, PageMode.FILM_VIEW);
       this._filterModel.setFilter(UpdateType.MAJOR, filterType);
       return;
     }
