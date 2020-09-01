@@ -41,3 +41,9 @@ export const sortFilmsByDate = (firstFilm, secondFilm) => {
 export const sortFilmsByRating = (firstFilm, secondFilm) => {
   return secondFilm.rating - firstFilm.rating;
 };
+
+export const sortByCommentsCount = (firstFilm, secondFilm) => {
+  return secondFilm.commentsCount - firstFilm.commentsCount;
+};
+
+export const generateId = () => Math.random().toString(36).substr(2, 9);

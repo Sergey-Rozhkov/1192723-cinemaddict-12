@@ -1,7 +1,6 @@
-export const FILMS_CARD_COUNT = 32;
 export const FILMS_COUNT_PER_STEP = 10;
 export const TOP_RATED_COUNT = 2;
-export const MOST_RECOMMENDED_COUNT = 2;
+export const MOST_COMMENTED_COUNT = 2;
 export const MAX_FILM_DESCRIPTION_LENGTH = 140;
 export const FILM_DESCRIPTION_AFTER_SIGN = `...`;
 export const MAX_DAY_GAP = 730;
@@ -33,7 +32,8 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 export const FilterType = {
   ALL: `all`,
@@ -58,3 +58,16 @@ export const StatisticPeriods = {
 };
 
 export const BAR_HEIGHT = 50;
+
+export const AUTHORIZATION = `Basic eUOHTevFz5tOpMESCq2j`;
+export const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict/`;
+
+export const Method = {
+  GET: `GET`,
+  PUT: `PUT`
+};
+
+export const SuccessHTTPStatusRange = {
+  MIN: 200,
+  MAX: 299
+};

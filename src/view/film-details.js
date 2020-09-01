@@ -7,7 +7,6 @@ export default class FilmDetail extends SmartView {
   constructor(film) {
     super();
     this._film = film;
-    this._data = FilmDetail.parseFilmToData(film);
 
     this._closePopupFilmDetailHandler = this._closePopupFilmDetailHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
@@ -127,6 +126,7 @@ export default class FilmDetail extends SmartView {
   }
 
   _createFilmDetailComments(comments) {
+    return ``;//  TODO load comments
     return (`
       <ul class="film-details__comments-list">
         ${comments.map((comment) =>
@@ -148,13 +148,6 @@ export default class FilmDetail extends SmartView {
     `);
   }
 
-  static parseFilmToData(film) {
-    return Object.assign(
-        {},
-        film
-    );
-  }
-
   restoreHandlers() {
     this._setInnerHandlers();
     this.setClosePopupFilmDetailHandler(this._callback.closeFilmDetail);
@@ -165,7 +158,7 @@ export default class FilmDetail extends SmartView {
   }
 
   getTemplate() {
-    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._data;
+    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._film;
 
     const writersText = writers.join(`, `);
     const actorsText = actors.join(`, `);
