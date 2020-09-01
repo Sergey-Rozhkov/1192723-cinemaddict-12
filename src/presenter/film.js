@@ -174,7 +174,7 @@ export default class Film {
   }
 
   _openFilmDetailHandler() {
-    //TODO load comments
+    //  TODO load comments
     renderElement(this._filmListContainer, this._filmDetailComponent, RenderPosition.BEFOREEND);
 
     this._filmDetailComponent.setCommentDeleteHandler(this._commentDeleteClickHandler);

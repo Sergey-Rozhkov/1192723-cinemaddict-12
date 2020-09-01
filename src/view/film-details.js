@@ -126,7 +126,6 @@ export default class FilmDetail extends SmartView {
   }
 
   _createFilmDetailComments(comments) {
-    return ``;//  TODO load comments
     return (`
       <ul class="film-details__comments-list">
         ${comments.map((comment) =>

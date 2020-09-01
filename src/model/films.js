@@ -65,7 +65,7 @@ export default class Films extends Observer {
     return adaptedFilm;
   }
 
-  static adaptToServer(film) {//Добить при тестировании
+  static adaptToServer(film) {
     const adaptedFilm = Object.assign(
         {},
         film,
@@ -78,8 +78,6 @@ export default class Films extends Observer {
           }
         }
     );
-
-    delete adaptedFilm.dueDate;
 
     return adaptedFilm;
   }
