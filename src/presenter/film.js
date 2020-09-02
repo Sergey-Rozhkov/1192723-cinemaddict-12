@@ -4,8 +4,8 @@ import FilmDetailLoadingView from "../view/film-details-loading";
 import CommentModel from "../model/comment";
 import {renderElement, replaceElement, removeElement} from "../utils/render";
 import {RenderPosition, Mode, UserAction, UpdateType} from "../const";
-import {generateComment} from "../mock/comment";
 import {getCurrentDate} from "../utils/common";
+import {generateId} from "../utils/film";
 
 export default class FilmPresenter {
   constructor(filmListContainer, changeData, changeMode, api) {
@@ -89,8 +89,18 @@ export default class FilmPresenter {
     );
   }
 
+  _generateBlankComment() {
+    return {
+      id: generateId(),
+      text: ``,
+      emotion: ``,
+      author: ``,
+      date: new Date(),
+    };
+  }
+
   _commentCtrlEnterAddHandler(update) {
-    const comment = generateComment();
+    const comment = this._generateBlankComment();
 
     this._commentsModel.addComment(
         UserAction.ADD_COMMENT,
