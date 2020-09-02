@@ -21,8 +21,6 @@ export const Mode = {
 };
 export const EMOJI_WIDTH = 55;
 export const EMOJI_HEIGHT = 55;
-export const MIN_MOCK_FILM_DURATION = 80;
-export const MAX_MOCK_FILM_DURATION = 150;
 export const UserAction = {
   UPDATE_FILM: `UPDATE_FILM`,
   DELETE_COMMENT: `DELETE_COMMENT`,
@@ -71,3 +69,10 @@ export const SuccessHTTPStatusRange = {
   MIN: 200,
   MAX: 299
 };
+
+export const USER_RATING_TOP_COUNT = 20;
+export const USER_RATING_MIDDLE_COUNT = 10;
+export const USER_RATING_MIN_COUNT = 1;
+export const USER_RATING_MIN_NAME = `novice`;
+export const USER_RATING_MIDDLE_NAME = `fan`;
+export const USER_RATING_TOP_NAME = `movie buff`;

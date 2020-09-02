@@ -1,20 +1,12 @@
 import {MAX_DAY_GAP} from "../const";
 
-export const getCurrentDate = () => {
-  return new Date();
-};
+export const getCurrentDate = () => new Date();
 
 export const getRandomInteger = (from = 0, to = 1) => {
   const lower = Math.ceil(Math.min(from, to));
   const upper = Math.floor(Math.max(from, to));
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-export const getRandomFloat = (from = 1, to = 0) => {
-  const lower = Math.min(from, to);
-  const upper = Math.max(from, to);
-  return (lower + Math.random() * (upper - lower)).toFixed(1);
 };
 
 export const getRandomElements = (data, count) => {
@@ -27,12 +19,6 @@ export const getRandomElements = (data, count) => {
   }
 
   return result;
-};
-
-export const getRandomElement = (data) => {
-  const randomIndex = getRandomInteger(0, data.length - 1);
-
-  return data[randomIndex];
 };
 
 export const generateDate = (start = -MAX_DAY_GAP, to = MAX_DAY_GAP) => {

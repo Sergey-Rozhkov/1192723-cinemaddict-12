@@ -1,5 +1,11 @@
 import moment from "moment";
-import {StatisticPeriods} from "../const";
+import {
+  StatisticPeriods,
+  USER_RATING_MIDDLE_COUNT, USER_RATING_MIDDLE_NAME,
+  USER_RATING_MIN_COUNT,
+  USER_RATING_MIN_NAME,
+  USER_RATING_TOP_COUNT, USER_RATING_TOP_NAME
+} from "../const";
 import {getCurrentDate} from "./common";
 
 export const countWatchedFilms = (films) => {
@@ -65,15 +71,14 @@ export const statisticsPeriod = {
 };
 
 export const getUserRank = (filmsCount) => {
-  let rating;
-  if (filmsCount === 0) {
-    rating = ``;
-  } else if (filmsCount >= 1 && filmsCount <= 10) {
-    rating = `novice`;
-  } else if (filmsCount <= 20) {
-    rating = `fan`;
-  } else {
-    rating = `movie buff`;
+  let rating = ``;
+
+  if (filmsCount > USER_RATING_TOP_COUNT) {
+    rating = USER_RATING_TOP_NAME;
+  } else if (filmsCount > USER_RATING_MIDDLE_COUNT) {
+    rating = USER_RATING_MIDDLE_NAME;
+  } else if (filmsCount >= USER_RATING_MIN_COUNT) {
+    rating = USER_RATING_MIN_NAME;
   }
 
   return rating;

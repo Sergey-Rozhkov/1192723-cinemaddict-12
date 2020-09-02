@@ -10,7 +10,7 @@ import TopRatedBlockView from "../view/top-rated-block";
 import MostRecommendedBlockView from "../view/most-recommended-block";
 import LoadingView from "../view/loading";
 import {filter} from "../utils/filter";
-import {renderElement, removeElement} from "../utils/render";
+import {renderElement, removeElement, replaceElement} from "../utils/render";
 import {sortFilmsByDate, sortFilmsByRating, sortByCommentsCount} from "../utils/film";
 import {
   FILMS_COUNT_PER_STEP,
@@ -21,19 +21,25 @@ import {
   TOP_RATED_COUNT,
   MOST_COMMENTED_COUNT
 } from "../const";
+import {countWatchedFilms} from "../utils/statistics";
+import UserProfileBlockView from "../view/user-profile-block";
 
-export default class MovieList {
-  constructor(boardContainer, filmsModel, filterModel) {
-    this._filmsModel = filmsModel;
+export default class MovieListPresenter {
+  constructor(boardContainer, headerElement, filmModel, filterModel, api) {
+    this._filmModel = filmModel;
     this._filterModel = filterModel;
     this._boardContainer = boardContainer;
+    this._headerElement = headerElement;
     this._renderedFilmCount = FILMS_COUNT_PER_STEP;
     this._currentSortType = SortType.DEFAULT;
     this._filmPresenter = {};
     this._isLoading = true;
+    this._api = api;
+    this._watchedFilmsCount = null;
 
     this._sortComponent = null;
     this._showMoreFilmsBtn = null;
+    this._userRatingBlockComponent = null;
 
     this._filmsBlockComponent = new FilmsBlockView();
     this._filmsListComponent = new FilmsListView();
@@ -52,7 +58,7 @@ export default class MovieList {
   }
 
   init(renderBoard = true) {
-    this._filmsModel.addObserver(this._handleModelEvent);
+    this._filmModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
     if (renderBoard) {
@@ -66,15 +72,14 @@ export default class MovieList {
     removeElement(this._filmsBlockComponent);
     removeElement(this._sortComponent);
 
-    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._filmModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _getFilms() {
     const filterType = this._filterModel.getFilter();
-    const films = this._filmsModel.getFilms();
+    const films = this._filmModel.getFilms();
     const filteredFilms = filter[filterType](films);
-
 
     switch (this._currentSortType) {
       case SortType.DATE:
@@ -91,7 +96,9 @@ export default class MovieList {
       case UserAction.UPDATE_FILM:
       case UserAction.DELETE_COMMENT:
       case UserAction.ADD_COMMENT:
-        this._filmsModel.updateFilm(updateType, update);
+        this._api.updateFilm(update).then((response) => {
+          this._filmModel.updateFilm(updateType, response);
+        });
         break;
     }
   }
@@ -100,20 +107,24 @@ export default class MovieList {
     switch (updateType) {
       case UpdateType.PATCH:
         this._filmPresenter[data.id].init(data);
+        this._renderUserRatingBlock();
         break;
       case UpdateType.MINOR:
         this._clearBoard();
         this._renderBoard();
+        this._renderUserRatingBlock();
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
         this._renderBoard();
+        this._renderUserRatingBlock();
         break;
       case UpdateType.INIT:
         this._isLoading = false;
         removeElement(this._loadingComponent);
         this._clearBoard({resetRenderedTaskCount: true, resetSortType: true});
         this._renderBoard();
+        this._renderUserRatingBlock();
         break;
     }
   }
@@ -167,7 +178,7 @@ export default class MovieList {
   }
 
   _renderFilm(film, container = this._filmsComponent) {
-    const filmPresenter = new FilmPresenter(container, this._handleViewAction, this._handleModeChange);
+    const filmPresenter = new FilmPresenter(container, this._handleViewAction, this._handleModeChange, this._api);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
@@ -236,6 +247,8 @@ export default class MovieList {
     this._filmPresenter = {};
 
     removeElement(this._sortComponent);
+    removeElement(this._filmsComponent);
+    removeElement(this._filmsListComponent);
     removeElement(this._noFilmComponent);
     removeElement(this._showMoreFilmsBtn);
     removeElement(this._topRatedFilmsComponent);
@@ -291,7 +304,7 @@ export default class MovieList {
   }
 
   _getTopRatedFilms() {
-    const sortedFilms = this._filmsModel.getFilms()
+    const sortedFilms = this._filmModel.getFilms()
       .slice()
       .filter((film) => film.rating > 0)
       .sort(sortFilmsByRating);
@@ -299,11 +312,33 @@ export default class MovieList {
   }
 
   _getMostCommentedFilms() {
-    const sortedFilms = this._filmsModel.getFilms()
+    const sortedFilms = this._filmModel.getFilms()
       .slice()
       .filter((film) => film.commentsCount > 0)
       .sort(sortFilmsByRating)
       .sort(sortByCommentsCount);
     return sortedFilms.splice(0, MOST_COMMENTED_COUNT);
+  }
+
+  _renderUserRatingBlock() {
+    const watchedFilmsCount = countWatchedFilms(this._filmModel.getFilms());
+    if (this._watchedFilmsCount !== null || this._watchedFilmsCount === watchedFilmsCount) {
+      return;
+    }
+    this._watchedFilmsCount = watchedFilmsCount;
+
+    const prevUserRatingComponent = this._userRatingBlockComponent;
+    this._userRatingBlockComponent = new UserProfileBlockView(watchedFilmsCount);
+
+    if (prevUserRatingComponent === null) {
+      renderElement(this._headerElement, this._userRatingBlockComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    if (this._headerElement.contains(prevUserRatingComponent.getElement())) {
+      replaceElement(this._userRatingBlockComponent, prevUserRatingComponent);
+    }
+
+    removeElement(prevUserRatingComponent);
   }
 }
