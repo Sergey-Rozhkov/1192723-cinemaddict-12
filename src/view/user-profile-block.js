@@ -1,4 +1,5 @@
 import AbstractView from "./abstract";
+import {getUserRank} from "../utils/statistics";
 
 export default class UserProfileBlock extends AbstractView {
   constructor(filmsCount) {
@@ -7,16 +8,7 @@ export default class UserProfileBlock extends AbstractView {
   }
 
   getTemplate() {
-    let rating = ``;
-    if (this._filmsCount === 0) {
-      rating = ``;
-    } else if (this._filmsCount >= 1 && this._filmsCount <= 10) {
-      rating = `novice`;
-    } else if (this._filmsCount <= 20) {
-      rating = `fan`;
-    } else {
-      rating = `movie buff`;
-    }
+    const rating = getUserRank(this._filmsCount);
 
     return (
       `<section class="header__profile profile">

@@ -1,4 +1,5 @@
 import moment from "moment";
+import {FILM_DETAIL_RELEASE_DATE_FORMAT, FILM_PREVIEW_RELEASE_DATE_FORMAT} from "../const";
 
 const formatDateByTemplate = (date, format) => {
   if (!(date instanceof Date)) {
@@ -9,11 +10,11 @@ const formatDateByTemplate = (date, format) => {
 };
 
 export const formatFilmReleaseDate = (dueDate) => {
-  return formatDateByTemplate(dueDate, `YYYY`);
+  return formatDateByTemplate(dueDate, FILM_PREVIEW_RELEASE_DATE_FORMAT);
 };
 
 export const formatFilmDetailReleaseDate = (date) => {
-  return formatDateByTemplate(date, `DD MMMM YYYY`);
+  return formatDateByTemplate(date, FILM_DETAIL_RELEASE_DATE_FORMAT);
 };
 
 export const formatFilmDuration = (duration) => {
@@ -33,18 +34,6 @@ export const humanizeCommentDate = (date) => {
   return moment(date).fromNow();
 };
 
-export const isFilmInWatchlist = (film) => {
-  return film.inWatchlist;
-};
-
-export const isFilmAlreadyWatched = (film) => {
-  return film.isAlreadyWatched;
-};
-
-export const isFilmInFavorite = (film) => {
-  return film.isFavorite;
-};
-
 export const sortFilmsByDate = (firstFilm, secondFilm) => {
   return secondFilm.date.getTime() - firstFilm.date.getTime();
 };
@@ -52,3 +41,9 @@ export const sortFilmsByDate = (firstFilm, secondFilm) => {
 export const sortFilmsByRating = (firstFilm, secondFilm) => {
   return secondFilm.rating - firstFilm.rating;
 };
+
+export const sortByCommentsCount = (firstFilm, secondFilm) => {
+  return secondFilm.commentsCount - firstFilm.commentsCount;
+};
+
+export const generateId = () => Math.random().toString(36).substr(2, 9);

@@ -1,12 +1,12 @@
 import SmartView from "./smart";
 import {humanizeCommentDate, formatFilmDetailReleaseDate, formatFilmDuration} from "../utils/film";
 import {EMOJI_WIDTH, EMOJI_HEIGHT} from "../const";
+import he from "he";
 
 export default class FilmDetail extends SmartView {
   constructor(film) {
     super();
     this._film = film;
-    this._data = FilmDetail.parseFilmToData(film);
 
     this._closePopupFilmDetailHandler = this._closePopupFilmDetailHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
@@ -14,6 +14,7 @@ export default class FilmDetail extends SmartView {
     this._inWatchlistClickHandler = this._inWatchlistClickHandler.bind(this);
     this._emotionClickHandler = this._emotionClickHandler.bind(this);
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
+    this._commentAddHandler = this._commentAddHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -24,13 +25,6 @@ export default class FilmDetail extends SmartView {
 
     emoji.forEach((element) => {
       element.addEventListener(`click`, this._emotionClickHandler);
-    });
-
-    const commentDeleteBtnElements = this.getElement()
-      .querySelectorAll(`.film-details__comment-delete`);
-
-    commentDeleteBtnElements.forEach((element) => {
-      element.addEventListener(`click`, this._commentDeleteHandler);
     });
   }
 
@@ -69,6 +63,21 @@ export default class FilmDetail extends SmartView {
     this._callback.commentDeleteClick(commentId);
   }
 
+  _commentAddHandler(evt) {
+    if ((evt.ctrlKey || evt.metaKey) && ((evt.keyCode === 10 || evt.keyCode === 13))) {
+      const text = this.getElement().querySelector(`.film-details__inner [name=comment]`).value;
+      const emotion = this.getElement().querySelector(`.film-details__inner [name=comment-emoji]:checked`).value;
+      const date = new Date();
+
+      evt.preventDefault();
+      this._callback.commentAddHandler({
+        text,
+        emotion,
+        date
+      });
+    }
+  }
+
   setClosePopupFilmDetailHandler(callback) {
     this._callback.closeFilmDetail = callback;
 
@@ -92,7 +101,18 @@ export default class FilmDetail extends SmartView {
 
   setCommentDeleteHandler(callback) {
     this._callback.commentDeleteClick = callback;
-    this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, this._commentDeleteHandler);
+
+    const commentDeleteBtnElements = this.getElement()
+      .querySelectorAll(`.film-details__comment-delete`);
+
+    commentDeleteBtnElements.forEach((element) => {
+      element.addEventListener(`click`, this._commentDeleteHandler);
+    });
+  }
+
+  setCommentAddHandler(callback) {
+    this._callback.commentAddHandler = callback;
+    this.getElement().addEventListener(`keydown`, this._commentAddHandler);
   }
 
   _createFilmDetailGenres(genres) {
@@ -114,7 +134,7 @@ export default class FilmDetail extends SmartView {
               <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
             </span>
             <div>
-              <p class="film-details__comment-text">${comment.text}</p>
+              <p class="film-details__comment-text">${he.encode(comment.text)}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${comment.author}</span>
                 <span class="film-details__comment-day">${humanizeCommentDate(comment.date)}</span>
@@ -127,13 +147,6 @@ export default class FilmDetail extends SmartView {
     `);
   }
 
-  static parseFilmToData(film) {
-    return Object.assign(
-        {},
-        film
-    );
-  }
-
   restoreHandlers() {
     this._setInnerHandlers();
     this.setClosePopupFilmDetailHandler(this._callback.closeFilmDetail);
@@ -144,7 +157,7 @@ export default class FilmDetail extends SmartView {
   }
 
   getTemplate() {
-    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._data;
+    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._film;
 
     const writersText = writers.join(`, `);
     const actorsText = actors.join(`, `);
