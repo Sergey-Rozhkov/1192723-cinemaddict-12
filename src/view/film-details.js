@@ -7,6 +7,7 @@ export default class FilmDetail extends SmartView {
   constructor(film) {
     super();
     this._film = film;
+    this._data = FilmDetail.parseFilmToData(film);
 
     this._closePopupFilmDetailHandler = this._closePopupFilmDetailHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
@@ -125,7 +126,7 @@ export default class FilmDetail extends SmartView {
   `);
   }
 
-  _createFilmDetailComments(comments) {
+  _createFilmDetailComments(comments, isDeleting) {
     return (`
       <ul class="film-details__comments-list">
         ${comments.map((comment) =>
@@ -138,7 +139,9 @@ export default class FilmDetail extends SmartView {
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${comment.author}</span>
                 <span class="film-details__comment-day">${humanizeCommentDate(comment.date)}</span>
-                <button class="film-details__comment-delete" data-comment-id="${comment.id}">Delete</button>
+                <button class="film-details__comment-delete" data-comment-id="${comment.id}">
+                ${isDeleting ? `Deleting...` : `Delete`}
+                </button>
               </p>
             </div>
           </li>`
@@ -156,8 +159,28 @@ export default class FilmDetail extends SmartView {
     this.setCommentDeleteHandler(this._callback.commentDeleteClick);
   }
 
+  static parseFilmToData(film) {
+    return Object.assign(
+        {},
+        film,
+        {
+          isSaving: false,
+          isDeleting: false
+        }
+    );
+  }
+
+  static parseDataToFilm(data) {
+    const film = Object.assign({}, data);
+
+    delete film.isSaving;
+    delete film.isDeleting;
+
+    return film;
+  }
+
   getTemplate() {
-    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, comments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite} = this._film;
+    const {name, originalName, writers, producer, ageRating, fullPoster, actors, countries, date, genres, description, loadedComments, duration, rating, inWatchlist, isAlreadyWatched, isFavorite, isDeleting} = this._data;
 
     const writersText = writers.join(`, `);
     const actorsText = actors.join(`, `);
@@ -237,9 +260,9 @@ export default class FilmDetail extends SmartView {
 
           <div class="form-details__bottom-container">
             <section class="film-details__comments-wrap">
-              <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+              <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${loadedComments.length}</span></h3>
 
-              ${this._createFilmDetailComments(comments)}
+              ${this._createFilmDetailComments(loadedComments, isDeleting)}
 
               <div class="film-details__new-comment">
                 <div for="add-emoji" class="film-details__add-emoji-label"></div>

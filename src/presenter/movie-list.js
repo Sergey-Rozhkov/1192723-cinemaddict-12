@@ -19,7 +19,7 @@ import {
   UpdateType,
   UserAction,
   TOP_RATED_COUNT,
-  MOST_COMMENTED_COUNT
+  MOST_COMMENTED_COUNT, FilmDetailCardState
 } from "../const";
 import {countWatchedFilms} from "../utils/statistics";
 import UserProfileBlockView from "../view/user-profile-block";
@@ -94,11 +94,17 @@ export default class MovieListPresenter {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-      case UserAction.DELETE_COMMENT:
-      case UserAction.ADD_COMMENT:
         this._api.updateFilm(update).then((response) => {
           this._filmModel.updateFilm(updateType, response);
         });
+        break;
+      case UserAction.ADD_COMMENT:
+        this._filmPresenter[update.id].setViewState(FilmDetailCardState.SAVING);
+        this._filmModel.updateFilm(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._filmPresenter[update.id].setViewState(FilmDetailCardState.DELETING);
+        this._filmModel.updateFilm(updateType, update);
         break;
     }
   }

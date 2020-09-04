@@ -59,11 +59,28 @@ export default class CommentModel extends Observer {
         {},
         comment,
         {
+          date: new Date(comment.date),
           text: comment.comment,
         }
     );
 
     delete adaptedComment.comment;
+
+    return adaptedComment;
+  }
+
+  static adaptToServer(comment) {
+    const adaptedComment = Object.assign(
+        {},
+        comment,
+        {
+          comment: comment.text
+        }
+    );
+
+    delete adaptedComment.id;
+    delete adaptedComment.text;
+    delete adaptedComment.filmId;
 
     return adaptedComment;
   }

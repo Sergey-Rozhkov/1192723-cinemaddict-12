@@ -58,11 +58,13 @@ export const StatisticPeriods = {
 export const BAR_HEIGHT = 50;
 
 export const AUTHORIZATION = `Basic eUOHTevFz5tOpMESCq2j`;
-export const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict/`;
+export const END_POINT = `https://12.ecmascript.pages.academy/cinemaddict`;
 
 export const Method = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`
 };
 
 export const SuccessHTTPStatusRange = {
@@ -76,3 +78,8 @@ export const USER_RATING_MIN_COUNT = 1;
 export const USER_RATING_MIN_NAME = `novice`;
 export const USER_RATING_MIDDLE_NAME = `fan`;
 export const USER_RATING_TOP_NAME = `movie buff`;
+
+export const FilmDetailCardState = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`
+};
