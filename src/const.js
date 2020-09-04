@@ -3,7 +3,6 @@ export const TOP_RATED_COUNT = 2;
 export const MOST_COMMENTED_COUNT = 2;
 export const MAX_FILM_DESCRIPTION_LENGTH = 140;
 export const FILM_DESCRIPTION_AFTER_SIGN = `...`;
-export const MAX_DAY_GAP = 730;
 export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
@@ -25,6 +24,7 @@ export const UserAction = {
   UPDATE_FILM: `UPDATE_FILM`,
   DELETE_COMMENT: `DELETE_COMMENT`,
   ADD_COMMENT: `ADD_COMMENT`,
+  SET_COMMENTS: `SET_COMMENTS`,
   CHANGE_MODE: `CHANGE_MODE`
 };
 export const UpdateType = {
@@ -78,8 +78,5 @@ export const USER_RATING_MIN_COUNT = 1;
 export const USER_RATING_MIN_NAME = `novice`;
 export const USER_RATING_MIDDLE_NAME = `fan`;
 export const USER_RATING_TOP_NAME = `movie buff`;
-
-export const FilmDetailCardState = {
-  SAVING: `SAVING`,
-  DELETING: `DELETING`
-};
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+export const FILMS_COUNT_FORMAT = `ru-RU`;

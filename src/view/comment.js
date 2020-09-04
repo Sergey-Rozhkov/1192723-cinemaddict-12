@@ -1,11 +1,11 @@
-import AbstractView from "./abstract";
+import SmartView from "./smart";
 import he from "he";
 import {humanizeCommentDate} from "../utils/film";
 
-export default class CommentView extends AbstractView {
+export default class CommentView extends SmartView {
   constructor(comment) {
     super();
-    this._comment = comment;
+    this._data = CommentView.parseCommentToData(comment);
 
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
   }
@@ -19,16 +19,31 @@ export default class CommentView extends AbstractView {
   setCommentDeleteHandler(callback) {
     this._callback.commentDeleteClick = callback;
 
-    const commentDeleteBtnElements = this.getElement()
-      .querySelectorAll(`.film-details__comment-delete`);
+    this._setInnerHandlers();
+  }
 
-    commentDeleteBtnElements.forEach((element) => {
-      element.addEventListener(`click`, this._commentDeleteHandler);
-    });
+  _setInnerHandlers() {
+    const commentDeleteBtnElement = this.getElement().querySelector(`.film-details__comment-delete`);
+    commentDeleteBtnElement.addEventListener(`click`, this._commentDeleteHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  static parseCommentToData(comment) {
+    return Object.assign(
+        {},
+        comment,
+        {
+          isDisabled: false,
+          isDeleting: false,
+        }
+    );
   }
 
   getTemplate() {
-    const {emotion, text, author, date, id} = this._comment;
+    const {emotion, text, author, date, id, isDisabled, isDeleting} = this._data;
 
     return (
       `<li class="film-details__comment">
@@ -40,8 +55,8 @@ export default class CommentView extends AbstractView {
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${author}</span>
                 <span class="film-details__comment-day">${humanizeCommentDate(date)}</span>
-                <button class="film-details__comment-delete" data-comment-id="${id}">
-                Delete
+                <button class="film-details__comment-delete" data-comment-id="${id}" ${isDisabled ? `disabled` : ``}>
+                ${isDeleting ? `Deleting...` : `Delete`}
                 </button>
               </p>
             </div>
@@ -49,4 +64,3 @@ export default class CommentView extends AbstractView {
     );
   }
 }
-

@@ -1,7 +1,7 @@
 import AbstractView from "./abstract";
 import {PageMode} from "../const";
 
-export default class Filter extends AbstractView {
+export default class FilterView extends AbstractView {
   constructor(filters, currentFilterType, currentPageMode) {
     super();
 

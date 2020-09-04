@@ -6,37 +6,16 @@ export default class CommentModel extends Observer {
     this._comments = [];
   }
 
-  setComments(comments) {
+  setComments(comments, updateType = ``) {
     this._comments = comments.slice();
+
+    if (updateType) {
+      this._broadcast(updateType, comments);
+    }
   }
 
   getComments() {
     return this._comments;
-  }
-
-  updateComment(updateType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
-
-    if (index === -1) {
-      throw new Error(`Can't update unexisting task`);
-    }
-
-    this._comments = [
-      ...this._comments.slice(0, index),
-      update,
-      ...this._comments.slice(index + 1)
-    ];
-
-    this._broadcast(updateType, update);
-  }
-
-  addComment(updateType, update) {
-    this._comments = [
-      update,
-      ...this._comments
-    ];
-
-    this._broadcast(updateType, update);
   }
 
   deleteComment(updateType, commentId) {

@@ -39,12 +39,7 @@ export default class StatisticsPresenter {
   _filterClickHandler(filterType) {
     this._currentFilter = filterType;
     const films = statisticsPeriod[filterType](this._filmModel.getFilms());
-    this._destroy();
+    this.destroy();
     this.init(films);
-  }
-
-  _destroy() {
-    removeElement(this._statisticsPageComponent);
-    this._statisticsPageComponent = null;
   }
 }

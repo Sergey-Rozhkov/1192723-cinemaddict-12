@@ -1,29 +1,31 @@
 import {removeElement, renderElement} from "../utils/render";
-import {RenderPosition, UserAction, UpdateType, FilmDetailCardState} from "../const";
+import {RenderPosition, UserAction} from "../const";
 import CommentListView from "../view/comment-list";
 import {generateId} from "../utils/film";
 import CommentPresenter from "./comment";
-
+import CommentAddFormView from "../view/comment-form";
 
 export default class CommentListPresenter {
-  constructor(commentContainer, commentModel, changeData, api) {
+  constructor(commentContainer, commentModel, film, api) {
     this._commentContainer = commentContainer;
-    this._changeData = changeData;
     this._commentModel = commentModel;
     this._commentsLength = commentModel.getComments().length;
     this._api = api;
+    this._film = film;
     this._commentPresenter = {};
 
     this._commentsListComponent = new CommentListView(this._commentsLength);
+    this._commentsAddFormComponent = new CommentAddFormView();
     this._commentsList = this._commentsListComponent.getElement().querySelector(`.film-details__comments-list`);
 
-    this._commentCtrlEnterAddHandler = this._commentCtrlEnterAddHandler.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
+    this._commentCtrlEnterAddHandler = this._commentCtrlEnterAddHandler.bind(this);
   }
 
   init() {
     renderElement(this._commentContainer, this._commentsListComponent, RenderPosition.BEFOREEND);
-
+    renderElement(this._commentsListComponent, this._commentsAddFormComponent, RenderPosition.BEFOREEND);
+    this._commentsAddFormComponent.setCommentAddHandler(this._commentCtrlEnterAddHandler);
     this._renderComments(this._commentModel.getComments());
   }
 
@@ -46,14 +48,6 @@ export default class CommentListPresenter {
     this._commentPresenter[comment.id] = commentPresenter;
   }
 
-  destroy() {
-    removeElement(this._commentsListComponent);
-    Object
-      .values(this._commentPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._commentPresenter = {};
-  }
-
   _generateBlankComment() {
     return {
       id: generateId(),
@@ -65,6 +59,23 @@ export default class CommentListPresenter {
     };
   }
 
+  _setSaving(comment) {
+    this._commentsAddFormComponent.updateData({
+      isSaving: true,
+      comment
+    });
+  }
+
+  _setAborting() {
+    const resetFormState = () => {
+      this._commentsAddFormComponent.updateData({
+        isSaving: false,
+      });
+    };
+
+    this._commentsAddFormComponent.shake(resetFormState);
+  }
+
   _commentCtrlEnterAddHandler(update) {
     const blankComment = this._generateBlankComment();
     const comment = Object.assign(
@@ -72,20 +83,23 @@ export default class CommentListPresenter {
         blankComment,
         update
     );
+    this._setSaving(comment);
 
-    this._api.addComment(comment).then((response) => {
-      this._commentsModel.setComments(response);
-      this._changeData(
-          UserAction.ADD_COMMENT,
-          UpdateType.PATCH,
-          Object.assign(
-              {},
-              this._film,
-              {
-                comments: this._commentsModel.getComments()
-              }
-          )
-      );
-    });
+    this._api.addComment(comment)
+      .then((response) => {
+        this._commentModel.setComments(response, UserAction.SET_COMMENTS);
+      })
+      .catch(() => {
+        this._setAborting();
+      });
+  }
+
+  destroy() {
+    removeElement(this._commentsAddFormComponent);
+    removeElement(this._commentsListComponent);
+    Object
+      .values(this._commentPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._commentPresenter = {};
   }
 }
