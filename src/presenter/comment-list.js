@@ -20,13 +20,15 @@ export default class CommentListPresenter {
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._commentCtrlEnterAddHandler = this._commentCtrlEnterAddHandler.bind(this);
+    this.changeOnline = this.changeOnline.bind(this);
+    this._commentsAddFormComponent.setCommentAddHandler(this._commentCtrlEnterAddHandler);
   }
 
   init() {
     renderElement(this._commentContainer, this._commentsListComponent, RenderPosition.BEFOREEND);
     renderElement(this._commentsListComponent, this._commentsAddFormComponent, RenderPosition.BEFOREEND);
-    this._commentsAddFormComponent.setCommentAddHandler(this._commentCtrlEnterAddHandler);
     this._renderComments(this._commentModel.getComments());
+    this._setInnerHandlers();
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -61,7 +63,7 @@ export default class CommentListPresenter {
 
   _setSaving(comment) {
     this._commentsAddFormComponent.updateData({
-      isSaving: true,
+      isDisabled: true,
       comment
     });
   }
@@ -69,7 +71,7 @@ export default class CommentListPresenter {
   _setAborting() {
     const resetFormState = () => {
       this._commentsAddFormComponent.updateData({
-        isSaving: false,
+        isDisabled: false,
       });
     };
 
@@ -101,5 +103,26 @@ export default class CommentListPresenter {
       .values(this._commentPresenter)
       .forEach((presenter) => presenter.destroy());
     this._commentPresenter = {};
+    this._unsetInnerHandlers();
+  }
+
+  changeOnline() {
+    Object
+      .values(this._commentPresenter)
+      .forEach((presenter) => presenter.changeOnline());
+
+    this._commentsAddFormComponent.updateData({
+      isDisabled: !this._api.isOnline(),
+    });
+  }
+
+  _unsetInnerHandlers() {
+    window.removeEventListener(`online`, this.changeOnline);
+    window.removeEventListener(`offline`, this.changeOnline);
+  }
+
+  _setInnerHandlers() {
+    window.addEventListener(`online`, this.changeOnline);
+    window.addEventListener(`offline`, this.changeOnline);
   }
 }

@@ -124,12 +124,12 @@ export default class FilmPresenter {
   }
 
   _favoriteClickHandler() {
-    if (this._filterModel.getFilter() === FilterType.WATCHLIST) {
+    if (this._filterModel.getFilter() === FilterType.FAVORITES) {
       this._needUpdateBoard[FilterType.FAVORITES] = !this._needUpdateBoard[FilterType.FAVORITES];
     }
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.PATCH,
+        this._getNeededUpdateType(),
         Object.assign(
             {},
             this._film,
@@ -146,7 +146,7 @@ export default class FilmPresenter {
     }
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.PATCH,
+        this._getNeededUpdateType(),
         Object.assign(
             {},
             this._film,
@@ -163,7 +163,7 @@ export default class FilmPresenter {
     }
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.PATCH,
+        this._getNeededUpdateType(),
         Object.assign(
             {},
             this._film,
@@ -238,5 +238,9 @@ export default class FilmPresenter {
       acc[item] = false;
       return acc;
     }, {});
+  }
+
+  _getNeededUpdateType() {
+    return (this._mode === Mode.CLOSED) ? UpdateType.MINOR : UpdateType.PATCH;
   }
 }

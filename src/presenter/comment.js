@@ -33,6 +33,12 @@ export default class CommentPresenter {
     removeElement(this._commentComponent);
   }
 
+  changeOnline() {
+    this._commentComponent.updateData({
+      isOnline: this._api.isOnline(),
+    });
+  }
+
   _setDeleting() {
     this._commentComponent.updateData({
       isDisabled: true,

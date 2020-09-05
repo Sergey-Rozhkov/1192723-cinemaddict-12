@@ -81,3 +81,7 @@ export const USER_RATING_MIDDLE_NAME = `fan`;
 export const USER_RATING_TOP_NAME = `movie buff`;
 export const SHAKE_ANIMATION_TIMEOUT = 600;
 export const FILMS_COUNT_FORMAT = `ru-RU`;
+
+export const STORE_PREFIX = `cinemaddict-localstorage`;
+export const STORE_VER = `v12`;
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
