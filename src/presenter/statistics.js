@@ -1,4 +1,4 @@
-import {RenderPosition, StatisticPeriods} from "../const";
+import {RenderPosition, StatisticPeriod} from "../const";
 import {removeElement, renderElement} from "../utils/render";
 import StatisticPageView from "../view/statistic-page";
 import {statisticsPeriod} from "../utils/statistics";
@@ -8,7 +8,7 @@ export default class StatisticsPresenter {
     this._boardContainer = boardContainer;
     this._filmModel = filmModel;
 
-    this._currentFilter = StatisticPeriods.ALL;
+    this._currentFilter = StatisticPeriod.ALL;
     this._statisticsPageComponent = null;
 
     this._filterClickHandler = this._filterClickHandler.bind(this);

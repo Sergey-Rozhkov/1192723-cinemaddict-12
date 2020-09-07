@@ -1,6 +1,6 @@
 import moment from "moment";
 import {
-  StatisticPeriods,
+  StatisticPeriod,
   USER_RATING_MIDDLE_COUNT, USER_RATING_MIDDLE_NAME,
   USER_RATING_MIN_COUNT,
   USER_RATING_MIN_NAME,
@@ -63,11 +63,11 @@ const getYearFilms = (films) => {
 };
 
 export const statisticsPeriod = {
-  [StatisticPeriods.ALL]: (films) => films,
-  [StatisticPeriods.TODAY]: (films) => getTodayFilms(films),
-  [StatisticPeriods.WEEK]: (films) => getWeekFilms(films),
-  [StatisticPeriods.MONTH]: (films) => getMonthFilms(films),
-  [StatisticPeriods.YEAR]: (films) => getYearFilms(films),
+  [StatisticPeriod.ALL]: (films) => films,
+  [StatisticPeriod.TODAY]: (films) => getTodayFilms(films),
+  [StatisticPeriod.WEEK]: (films) => getWeekFilms(films),
+  [StatisticPeriod.MONTH]: (films) => getMonthFilms(films),
+  [StatisticPeriod.YEAR]: (films) => getYearFilms(films),
 };
 
 export const getUserRank = (filmsCount) => {

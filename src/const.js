@@ -26,11 +26,13 @@ export const UserAction = {
   ADD_COMMENT: `ADD_COMMENT`,
   SET_COMMENTS: `SET_COMMENTS`,
   CHANGE_MODE: `CHANGE_MODE`,
-  UPDATE_FILM_MODEL: `UPDATE_FILM_MODEL`
+  UPDATE_FILM_MODEL: `UPDATE_FILM_MODEL`,
+  UPDATE_MOST_COMMENTED_BLOCK: `UPDATE_MOST_COMMENTED_BLOCK`
 };
 export const UpdateType = {
   PATCH: `PATCH`,
   PATCH_MODEL: `PATCH_MODEL`,
+  MAJOR_COMMENT_BLOCK: `MAJOR_COMMENT_BLOCK`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
   INIT: `INIT`
@@ -49,7 +51,7 @@ export const PageMode = {
   STATISTICS: `STATISTICS`
 };
 
-export const StatisticPeriods = {
+export const StatisticPeriod = {
   ALL: `all-time`,
   TODAY: `today`,
   WEEK: `week`,
@@ -87,8 +89,11 @@ export const STORE_PREFIX = `1192723-cinemaddict-localstorage`;
 export const STORE_VER = `v12`;
 export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
-export const FILM_TYPE = {
+export const FilmType = {
   MAIN: `MAIN`,
   TOP_RATED: `TOP_RATED`,
   MOST_COMMENTED: `MOST_COMMENTED`,
 };
+
+export const ESC_KEY_FULL_CODE = `Escape`;
+export const ESC_KEY_SHORT_CODE = `Esc`;
