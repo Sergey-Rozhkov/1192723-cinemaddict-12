@@ -1,7 +1,7 @@
 import Observer from "../utils/observer.js";
 import {PageMode} from "../const.js";
 
-export default class AppPageMode extends Observer {
+export default class PageModeModel extends Observer {
   constructor() {
     super();
     this._pageMode = PageMode.FILM_VIEW;

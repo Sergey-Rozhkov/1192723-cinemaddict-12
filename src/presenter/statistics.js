@@ -4,9 +4,9 @@ import StatisticPageView from "../view/statistic-page";
 import {statisticsPeriod} from "../utils/statistics";
 
 export default class StatisticsPresenter {
-  constructor(boardContainer, filmsModel) {
+  constructor(boardContainer, filmModel) {
     this._boardContainer = boardContainer;
-    this._filmsModel = filmsModel;
+    this._filmModel = filmModel;
 
     this._currentFilter = StatisticPeriods.ALL;
     this._statisticsPageComponent = null;
@@ -14,7 +14,7 @@ export default class StatisticsPresenter {
     this._filterClickHandler = this._filterClickHandler.bind(this);
   }
 
-  init(films = this._filmsModel.getFilms()) {
+  init(films = this._filmModel.getFilms()) {
     const prevStatisticsPageComponent = this._statisticsPageComponent;
 
     const watchedFilms = films.filter((film) => film.isAlreadyWatched);
@@ -38,13 +38,8 @@ export default class StatisticsPresenter {
 
   _filterClickHandler(filterType) {
     this._currentFilter = filterType;
-    const films = statisticsPeriod[filterType](this._filmsModel.getFilms());
-    this._destroy();
+    const films = statisticsPeriod[filterType](this._filmModel.getFilms());
+    this.destroy();
     this.init(films);
-  }
-
-  _destroy() {
-    removeElement(this._statisticsPageComponent);
-    this._statisticsPageComponent = null;
   }
 }

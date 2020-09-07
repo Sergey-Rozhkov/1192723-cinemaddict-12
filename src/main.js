@@ -1,43 +1,42 @@
 import {
   RenderPosition,
   END_POINT,
-  AUTHORIZATION, UpdateType
+  AUTHORIZATION, UpdateType, STORE_NAME
 } from "./const";
 import {renderElement} from "./utils/render";
 import {getRandomInteger} from "./utils/common";
 
-import UserProfileBlockView from "./view/user-profile-block";
 import StatisticView from "./view/statistic";
 
 import AppPageModePresenter from "./presenter/page-mode";
 import MovieListPresenter from "./presenter/movie-list";
 import FilterPresenter from "./presenter/filter";
 import StatisticsPresenter from "./presenter/statistics";
-import FilmsModel from "./model/films";
+import FilmModel from "./model/film";
 import FilterModel from "./model/filter";
-import AppPageModeModel from "./model/page-mode";
-import {countWatchedFilms} from "./utils/statistics";
-import Api from "./api";
+import PageModeModel from "./model/page-mode";
+import Api from "./api/index";
+import Store from "./api/store";
+import Provider from "./api/provider";
 
 const api = new Api(END_POINT, AUTHORIZATION);
-const filmsModel = new FilmsModel();
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
+const filmModel = new FilmModel();
 const filterModel = new FilterModel();
 
 const filmsCountInBase = getRandomInteger(10000, 1000000);
-const watchedFilmsCount = countWatchedFilms(filmsModel.getFilms());
 
 const mainElement = document.querySelector(`.main`);
 const headerElement = document.querySelector(`.header`);
 const footerElement = document.querySelector(`.footer`);
 const footerStatisticElement = footerElement.querySelector(`.footer__statistics`);
 
-renderElement(headerElement, new UserProfileBlockView(watchedFilmsCount), RenderPosition.BEFOREEND);
+const pageModeModel = new PageModeModel();
 
-const pageModeModel = new AppPageModeModel();
-
-const movieListPresenter = new MovieListPresenter(mainElement, filmsModel, filterModel, pageModeModel);
-const statisticsPresenter = new StatisticsPresenter(mainElement, filmsModel);
-const filterPresenter = new FilterPresenter(mainElement, filterModel, filmsModel, pageModeModel);
+const movieListPresenter = new MovieListPresenter(mainElement, headerElement, filmModel, filterModel, apiWithProvider);
+const statisticsPresenter = new StatisticsPresenter(mainElement, filmModel);
+const filterPresenter = new FilterPresenter(mainElement, filterModel, filmModel, pageModeModel);
 filterPresenter.init();
 movieListPresenter.init(true);
 
@@ -46,10 +45,30 @@ appPageModePresenter.init();
 
 renderElement(footerStatisticElement, new StatisticView(filmsCountInBase), RenderPosition.BEFOREEND);
 
-api.getFilms()
+apiWithProvider.getFilms()
   .then((films) => {
-    filmsModel.setFilms(UpdateType.INIT, films);
+    filmModel.setFilms(UpdateType.INIT, films);
   })
   .catch(() => {
-    filmsModel.setFilms(UpdateType.INIT, []);
+    filmModel.setFilms(UpdateType.INIT, []);
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      console.log(`ServiceWorker available`); // eslint-disable-line
+    }).catch(() => {
+      console.error(`ServiceWorker isn't available`); // eslint-disable-line
+    });
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  if (apiWithProvider.isNeedUpdate()) {
+    apiWithProvider.sync();
+  }
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
