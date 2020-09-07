@@ -19,7 +19,7 @@ import {
   UpdateType,
   UserAction,
   TOP_RATED_COUNT,
-  MOST_COMMENTED_COUNT, FILM_TYPE
+  MOST_COMMENTED_COUNT, FilmType
 } from "../const";
 import {countWatchedFilms} from "../utils/statistics";
 import UserProfileBlockView from "../view/user-profile-block";
@@ -103,6 +103,9 @@ export default class MovieListPresenter {
       case UserAction.UPDATE_FILM_MODEL:
         this._filmModel.updateFilm(updateType, update);
         break;
+      case UserAction.UPDATE_MOST_COMMENTED_BLOCK:
+        this._filmModel.updateFilm(updateType, update);
+        break;
       case UserAction.SET_COMMENTS:
       case UserAction.DELETE_COMMENT:
         this._filmModel.updateFilm(UpdateType.PATCH_MODEL, update);
@@ -112,12 +115,11 @@ export default class MovieListPresenter {
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
-      case UpdateType.PATCH_MODEL:
-        this._filmPresenter[data.id].renderFilmComponent(data);
-        if (this._filmTopRatedPresenter[data.id]) {
-          this._filmTopRatedPresenter[data.id].renderFilmComponent(data);
-        }
+      case UpdateType.MAJOR_COMMENT_BLOCK:
         this._renderCommentedBlock();
+        break;
+      case UpdateType.PATCH_MODEL:
+        this._renderFilmCardComponents(data);
         break;
       case UpdateType.PATCH:
         this._initFilmCardComponents(data);
@@ -150,6 +152,16 @@ export default class MovieListPresenter {
     }
     if (this._filmCommentedPresenter[film.id]) {
       this._filmCommentedPresenter[film.id].init(film);
+    }
+  }
+
+  _renderFilmCardComponents(film) {
+    this._filmPresenter[film.id].renderFilmComponent(film);
+    if (this._filmTopRatedPresenter[film.id]) {
+      this._filmTopRatedPresenter[film.id].renderFilmComponent(film);
+    }
+    if (this._filmCommentedPresenter[film.id]) {
+      this._filmCommentedPresenter[film.id].renderFilmComponent(film);
     }
   }
 
@@ -205,13 +217,13 @@ export default class MovieListPresenter {
     const filmPresenter = new FilmPresenter(container, this._filmsBlockComponent, this._handleViewAction, this._handleModeChange, this._filterModel, this._api);
     filmPresenter.init(film);
     switch (filmType) {
-      case FILM_TYPE.MAIN:
+      case FilmType.MAIN:
         this._filmPresenter[film.id] = filmPresenter;
         break;
-      case FILM_TYPE.TOP_RATED:
+      case FilmType.TOP_RATED:
         this._filmTopRatedPresenter[film.id] = filmPresenter;
         break;
-      case FILM_TYPE.MOST_COMMENTED:
+      case FilmType.MOST_COMMENTED:
         this._filmCommentedPresenter[film.id] = filmPresenter;
         break;
     }
@@ -239,7 +251,7 @@ export default class MovieListPresenter {
     const topRatedFilmsElement = this._topRatedFilmsComponent.getElement().querySelector(`.films-list__container`);
     this._boardTopRatedFilms
       .slice()
-      .forEach((film) => this._renderFilm(film, topRatedFilmsElement, FILM_TYPE.TOP_RATED));
+      .forEach((film) => this._renderFilm(film, topRatedFilmsElement, FilmType.TOP_RATED));
   }
 
   _renderMostCommentedFilmsList() {
@@ -252,12 +264,12 @@ export default class MovieListPresenter {
     const mostRecommendedFilmsElement = this._mostCommentedFilmsComponent.getElement().querySelector(`.films-list__container`);
     this._boardMostCommentedFilms
       .slice()
-      .forEach((film) => this._renderFilm(film, mostRecommendedFilmsElement, FILM_TYPE.MOST_COMMENTED));
+      .forEach((film) => this._renderFilm(film, mostRecommendedFilmsElement, FilmType.MOST_COMMENTED));
   }
 
   _renderFilms(films) {
     films
-      .forEach((film) => this._renderFilm(film, this._filmsComponent, FILM_TYPE.MAIN));
+      .forEach((film) => this._renderFilm(film, this._filmsComponent, FilmType.MAIN));
   }
 
 

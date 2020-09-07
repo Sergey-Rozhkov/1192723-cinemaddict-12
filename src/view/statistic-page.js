@@ -7,7 +7,7 @@ import {
   makeItemsUniq,
   countFilmsByGenre, getUserRank
 } from "../utils/statistics";
-import {BAR_HEIGHT, StatisticPeriods} from "../const";
+import {BAR_HEIGHT, StatisticPeriod} from "../const";
 
 const renderDiagramChart = (statisticCtx, filmByGenresCount) => {
   statisticCtx.height = BAR_HEIGHT * filmByGenresCount.length;
@@ -135,19 +135,19 @@ export default class StatisticPageView extends AbstractView {
   <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
     <p class="statistic__filters-description">Show stats:</p>
 
-    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${this._currentFilter === StatisticPeriods.ALL ? `checked` : ``}>
+    <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${this._currentFilter === StatisticPeriod.ALL ? `checked` : ``}>
       <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${this._currentFilter === StatisticPeriods.TODAY ? `checked` : ``}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${this._currentFilter === StatisticPeriod.TODAY ? `checked` : ``}>
         <label for="statistic-today" class="statistic__filters-label">Today</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${this._currentFilter === StatisticPeriods.WEEK ? `checked` : ``}>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${this._currentFilter === StatisticPeriod.WEEK ? `checked` : ``}>
           <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-          <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${this._currentFilter === StatisticPeriods.MONTH ? `checked` : ``}>
+          <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${this._currentFilter === StatisticPeriod.MONTH ? `checked` : ``}>
             <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-            <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${this._currentFilter === StatisticPeriods.YEAR ? `checked` : ``}>
+            <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${this._currentFilter === StatisticPeriod.YEAR ? `checked` : ``}>
               <label for="statistic-year" class="statistic__filters-label">Year</label>
   </form>
 <ul class="statistic__text-list">
