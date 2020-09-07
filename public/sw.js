@@ -1,4 +1,4 @@
-const CACHE_PREFIX = `taskmanager-cache`;
+const CACHE_PREFIX = `1192723-taskmanager-cache`;
 const CACHE_VER = `v12`;
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 

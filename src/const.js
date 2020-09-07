@@ -30,6 +30,7 @@ export const UserAction = {
 };
 export const UpdateType = {
   PATCH: `PATCH`,
+  PATCH_MODEL: `PATCH_MODEL`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`,
   INIT: `INIT`
@@ -82,6 +83,12 @@ export const USER_RATING_TOP_NAME = `movie buff`;
 export const SHAKE_ANIMATION_TIMEOUT = 600;
 export const FILMS_COUNT_FORMAT = `ru-RU`;
 
-export const STORE_PREFIX = `cinemaddict-localstorage`;
+export const STORE_PREFIX = `1192723-cinemaddict-localstorage`;
 export const STORE_VER = `v12`;
 export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+export const FILM_TYPE = {
+  MAIN: `MAIN`,
+  TOP_RATED: `TOP_RATED`,
+  MOST_COMMENTED: `MOST_COMMENTED`,
+};

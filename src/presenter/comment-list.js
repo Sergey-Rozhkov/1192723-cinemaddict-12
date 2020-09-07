@@ -9,12 +9,12 @@ export default class CommentListPresenter {
   constructor(commentContainer, commentModel, film, api) {
     this._commentContainer = commentContainer;
     this._commentModel = commentModel;
-    this._commentsLength = commentModel.getComments().length;
+    this._commentsCount = commentModel.getComments().length;
     this._api = api;
     this._film = film;
     this._commentPresenter = {};
 
-    this._commentsListComponent = new CommentListView(this._commentsLength);
+    this._commentsListComponent = new CommentListView(this._commentsCount);
     this._commentsAddFormComponent = new CommentAddFormView();
     this._commentsList = this._commentsListComponent.getElement().querySelector(`.film-details__comments-list`);
 

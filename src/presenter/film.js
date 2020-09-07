@@ -65,9 +65,7 @@ export default class FilmPresenter {
       return;
     }
 
-    if (this._filmListContainer.getElement().contains(prevFilmCardComponent.getElement())) {
-      replaceElement(this._filmComponent, prevFilmCardComponent);
-    }
+    replaceElement(this._filmComponent, prevFilmCardComponent);
 
     removeElement(prevFilmCardComponent);
   }
@@ -86,7 +84,7 @@ export default class FilmPresenter {
                 this._film,
                 {
                   comments: comments.map((comment) => comment.id),
-                  commentsLength: comments.length,
+                  commentsCount: comments.length,
                   loadedComments: this._commentsModel.getComments()
                 }
             )
@@ -129,7 +127,7 @@ export default class FilmPresenter {
     }
     this._changeData(
         UserAction.UPDATE_FILM,
-        this._getNeededUpdateType(),
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -146,7 +144,7 @@ export default class FilmPresenter {
     }
     this._changeData(
         UserAction.UPDATE_FILM,
-        this._getNeededUpdateType(),
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -163,7 +161,7 @@ export default class FilmPresenter {
     }
     this._changeData(
         UserAction.UPDATE_FILM,
-        this._getNeededUpdateType(),
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -238,9 +236,5 @@ export default class FilmPresenter {
       acc[item] = false;
       return acc;
     }, {});
-  }
-
-  _getNeededUpdateType() {
-    return (this._mode === Mode.CLOSED) ? UpdateType.MINOR : UpdateType.PATCH;
   }
 }
