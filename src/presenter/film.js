@@ -79,6 +79,18 @@ export default class FilmPresenter {
     removeElement(prevFilmCardComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.CLOSED) {
+      this._closeFilmDetailHandler();
+    }
+  }
+
+  destroy() {
+    removeElement(this._filmComponent);
+    removeElement(this._filmDetailComponent);
+    this._commentsModel.removeObserver(this._handleModelEvent);
+  }
+
   _handleModelEvent(actionType) {
     switch (actionType) {
       case UserAction.DELETE_COMMENT:
@@ -103,16 +115,49 @@ export default class FilmPresenter {
     }
   }
 
-  resetView() {
-    if (this._mode !== Mode.CLOSED) {
-      this._closeFilmDetailHandler();
-    }
+  _prepareFilmDetailComponent() {
+    this._filmDetailComponent = new FilmDetailView(this._film);
+
+    this._filmDetailComponent.setFavoriteClickHandler(this._favoriteClickHandler);
+    this._filmDetailComponent.setAlreadyWatchClickHandler(this._alreadyWatchClickHandler);
+    this._filmDetailComponent.setInWatchlistClickHandler(this._inWatchlistClickHandler);
+    this._filmDetailComponent.setClosePopupFilmDetailHandler(this._closeFilmDetailHandler);
+    this._filmDetailComponent.restoreHandlers();
   }
 
-  destroy() {
-    removeElement(this._filmComponent);
-    removeElement(this._filmDetailComponent);
-    this._commentsModel.removeObserver(this._handleModelEvent);
+  _replaceOpenedPopupInfo() {
+    const prevFilmDetailComponent = this._filmDetailComponent;
+    this._prepareFilmDetailComponent();
+
+    replaceElement(this._filmDetailComponent, prevFilmDetailComponent);
+
+    removeElement(prevFilmDetailComponent);
+
+    this._renderComments();
+  }
+
+  _renderComments() {
+    const container = this._filmDetailComponent.getElement().querySelector(`.form-details__bottom-container`);
+    if (this._commentListPresenter !== null) {
+      this._commentListPresenter.destroy();
+    }
+    this._commentListPresenter = new CommentListPresenter(container, this._commentsModel, this._film, this._api);
+    this._commentListPresenter.init();
+  }
+
+  _fillUpdatesFlag() {
+    return Object.values(FilterType).reduce((acc, item) => {
+      acc[item] = false;
+      return acc;
+    }, {});
+  }
+
+  _fillUpdateMostCommentedBlockFlag() {
+    return this._mode !== Mode.CLOSED;
+  }
+
+  _getNeededUpdateType(type) {
+    return (this._mode === Mode.CLOSED && type === this._filterModel.getFilter()) ? UpdateType.MINOR : UpdateType.PATCH;
   }
 
   _closeFilmDetailHandler() {
@@ -219,50 +264,5 @@ export default class FilmPresenter {
       this._changeMode();
       this._mode = Mode.OPENED;
     });
-  }
-
-  _prepareFilmDetailComponent() {
-    this._filmDetailComponent = new FilmDetailView(this._film);
-
-    this._filmDetailComponent.setFavoriteClickHandler(this._favoriteClickHandler);
-    this._filmDetailComponent.setAlreadyWatchClickHandler(this._alreadyWatchClickHandler);
-    this._filmDetailComponent.setInWatchlistClickHandler(this._inWatchlistClickHandler);
-    this._filmDetailComponent.setClosePopupFilmDetailHandler(this._closeFilmDetailHandler);
-    this._filmDetailComponent.restoreHandlers();
-  }
-
-  _replaceOpenedPopupInfo() {
-    const prevFilmDetailComponent = this._filmDetailComponent;
-    this._prepareFilmDetailComponent();
-
-    replaceElement(this._filmDetailComponent, prevFilmDetailComponent);
-
-    removeElement(prevFilmDetailComponent);
-
-    this._renderComments();
-  }
-
-  _renderComments() {
-    const container = this._filmDetailComponent.getElement().querySelector(`.form-details__bottom-container`);
-    if (this._commentListPresenter !== null) {
-      this._commentListPresenter.destroy();
-    }
-    this._commentListPresenter = new CommentListPresenter(container, this._commentsModel, this._film, this._api);
-    this._commentListPresenter.init();
-  }
-
-  _fillUpdatesFlag() {
-    return Object.values(FilterType).reduce((acc, item) => {
-      acc[item] = false;
-      return acc;
-    }, {});
-  }
-
-  _fillUpdateMostCommentedBlockFlag() {
-    return this._mode !== Mode.CLOSED;
-  }
-
-  _getNeededUpdateType(type) {
-    return (this._mode === Mode.CLOSED && type === this._filterModel.getFilter()) ? UpdateType.MINOR : UpdateType.PATCH;
   }
 }

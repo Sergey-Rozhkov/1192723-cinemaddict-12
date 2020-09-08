@@ -31,6 +31,26 @@ export default class CommentListPresenter {
     this._setInnerHandlers();
   }
 
+  destroy() {
+    removeElement(this._commentsAddFormComponent);
+    removeElement(this._commentsListComponent);
+    Object
+      .values(this._commentPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._commentPresenter = {};
+    this._unsetInnerHandlers();
+  }
+
+  changeOnline() {
+    Object
+      .values(this._commentPresenter)
+      .forEach((presenter) => presenter.changeOnline());
+
+    this._commentsAddFormComponent.updateData({
+      isDisabled: !this._api.isOnline(),
+    });
+  }
+
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.DELETE_COMMENT:
@@ -94,26 +114,6 @@ export default class CommentListPresenter {
       .catch(() => {
         this._setAborting();
       });
-  }
-
-  destroy() {
-    removeElement(this._commentsAddFormComponent);
-    removeElement(this._commentsListComponent);
-    Object
-      .values(this._commentPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._commentPresenter = {};
-    this._unsetInnerHandlers();
-  }
-
-  changeOnline() {
-    Object
-      .values(this._commentPresenter)
-      .forEach((presenter) => presenter.changeOnline());
-
-    this._commentsAddFormComponent.updateData({
-      isDisabled: !this._api.isOnline(),
-    });
   }
 
   _unsetInnerHandlers() {

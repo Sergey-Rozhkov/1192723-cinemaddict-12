@@ -13,20 +13,28 @@ export default class FilterView extends AbstractView {
     this._changePageModeHandler = this._changePageModeHandler.bind(this);
   }
 
-  _filterTypeChangeHandler(evt) {
-    evt.preventDefault();
-    const link = evt.target.href.split(`#`);
-    this._callback.filterTypeChange(link[1]);
-  }
+  getTemplate() {
+    const filterItemsTemplate = this._filters
+      .map((filter) => this._createFilterItemTemplate(filter, this._currentFilterType))
+      .join(``);
+    const isStatisticsMode = this._currentPageMode === PageMode.STATISTICS;
 
-  _changePageModeHandler(evt) {
-    evt.preventDefault();
-    this._callback.pageModeChange(PageMode.STATISTICS);
+    return (
+      `<nav class="main-navigation">
+      <div class="main-navigation__items">
+      ${filterItemsTemplate}
+      </div>
+      <a href="#stats" class="main-navigation__additional ${isStatisticsMode ? `main-navigation__additional--active` : ``}">Stats</a>
+    </nav>`
+    );
   }
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, this._filterTypeChangeHandler);
+    const filterLinkElements = this.getElement().querySelectorAll(`.main-navigation__item`);
+    filterLinkElements.forEach((link) => {
+      link.addEventListener(`click`, this._filterTypeChangeHandler);
+    });
   }
 
   setChangePageModeHandler(callback) {
@@ -46,19 +54,14 @@ export default class FilterView extends AbstractView {
     );
   }
 
-  getTemplate() {
-    const filterItemsTemplate = this._filters
-      .map((filter) => this._createFilterItemTemplate(filter, this._currentFilterType))
-      .join(``);
-    const isStatisticsMode = this._currentPageMode === PageMode.STATISTICS;
+  _filterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    const link = evt.currentTarget.href.split(`#`);
+    this._callback.filterTypeChange(link[1]);
+  }
 
-    return (
-      `<nav class="main-navigation">
-      <div class="main-navigation__items">
-      ${filterItemsTemplate}
-      </div>
-      <a href="#stats" class="main-navigation__additional ${isStatisticsMode ? `main-navigation__additional--active` : ``}">Stats</a>
-    </nav>`
-    );
+  _changePageModeHandler(evt) {
+    evt.preventDefault();
+    this._callback.pageModeChange(PageMode.STATISTICS);
   }
 }

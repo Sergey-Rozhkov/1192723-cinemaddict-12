@@ -103,6 +103,9 @@ export default class Provider {
     return this._isNeedUpdate;
   }
 
+  isOnline() {
+    return window.navigator.onLine;
+  }
 
   _getCommentStoreName(filmId) {
     return `${STORE_NAME}-${filmId}`;
@@ -116,9 +119,5 @@ export default class Provider {
 
     this._commentStore[storeName] = new Store(storeName, window.localStorage);
     return this._commentStore[storeName];
-  }
-
-  isOnline() {
-    return window.navigator.onLine;
   }
 }

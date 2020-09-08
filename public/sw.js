@@ -1,5 +1,5 @@
 const CACHE_PREFIX = `1192723-cinemaddict-cache`;
-const CACHE_VER = `v12`;
+const CACHE_VER = `v12-2`;
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 
 const HTTP_STATUS_OK = 200;

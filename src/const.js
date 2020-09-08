@@ -86,7 +86,7 @@ export const SHAKE_ANIMATION_TIMEOUT = 600;
 export const FILMS_COUNT_FORMAT = `ru-RU`;
 
 export const STORE_PREFIX = `1192723-cinemaddict-localstorage`;
-export const STORE_VER = `v12`;
+export const STORE_VER = `v12-2`;
 export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 export const FilmType = {

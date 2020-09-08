@@ -165,41 +165,6 @@ export default class MovieListPresenter {
     }
   }
 
-  _handleFilmChange(updatedFilm) {
-    this._filmPresenter[updatedFilm.id].init(updatedFilm);
-  }
-
-  _handleModeChange() {
-    Object
-      .values(this._filmPresenter)
-      .forEach((presenter) => presenter.resetView());
-  }
-
-  _handleSortTypeChange(sortType) {
-    if (this._currentSortType === sortType) {
-      return;
-    }
-
-    this._currentSortType = sortType;
-
-    this._clearBoard({resetRenderedTaskCount: true});
-    this._renderBoard();
-  }
-
-  _handleShowMoreFilmsBtn() {
-    const films = this._getFilms();
-
-    this._renderFilms(
-        films.slice(this._renderedFilmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP)
-    );
-
-    this._renderedFilmCount += FILMS_COUNT_PER_STEP;
-
-    if (this._renderedFilmCount >= films.length) {
-      removeElement(this._showMoreFilmsBtn);
-    }
-  }
-
   _renderSort(container = this._boardContainer) {
     this._sortComponent = new SortView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
@@ -399,5 +364,40 @@ export default class MovieListPresenter {
     this._clearCommentedBlock();
     this._boardMostCommentedFilms = this._getMostCommentedFilms();
     this._renderMostCommentedFilmsList();
+  }
+
+  _handleModeChange() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._currentSortType = sortType;
+
+    this._clearBoard({resetRenderedTaskCount: true});
+    this._renderBoard();
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
+  }
+
+  _handleShowMoreFilmsBtn() {
+    const films = this._getFilms();
+
+    this._renderFilms(
+        films.slice(this._renderedFilmCount, this._renderedFilmCount + FILMS_COUNT_PER_STEP)
+    );
+
+    this._renderedFilmCount += FILMS_COUNT_PER_STEP;
+
+    if (this._renderedFilmCount >= films.length) {
+      removeElement(this._showMoreFilmsBtn);
+    }
   }
 }

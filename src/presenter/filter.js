@@ -42,29 +42,6 @@ export default class Filter {
     removeElement(prevFilterComponent);
   }
 
-  _handleModelEvent() {
-    this.init();
-  }
-
-  _handleChangeMode(mode) {
-    this._pageModeModel.setMode(UserAction.CHANGE_MODE, mode);
-    this.init();
-  }
-
-  _handleFilterTypeChange(filterType) {
-    if (this._pageModeModel.getMode() !== PageMode.FILM_VIEW) {
-      this._pageModeModel.setMode(UserAction.CHANGE_MODE, PageMode.FILM_VIEW);
-      this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-      return;
-    }
-
-    if (this._currentFilter === filterType) {
-      return;
-    }
-
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-  }
-
   _getFilters() {
     const films = this._filmModel.getFilms();
 
@@ -90,5 +67,28 @@ export default class Filter {
         count: filter[FilterType.FAVORITES](films).length
       },
     ];
+  }
+
+  _handleModelEvent() {
+    this.init();
+  }
+
+  _handleChangeMode(mode) {
+    this._pageModeModel.setMode(UserAction.CHANGE_MODE, mode);
+    this.init();
+  }
+
+  _handleFilterTypeChange(filterType) {
+    if (this._pageModeModel.getMode() !== PageMode.FILM_VIEW) {
+      this._pageModeModel.setMode(UserAction.CHANGE_MODE, PageMode.FILM_VIEW);
+      this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+      return;
+    }
+
+    if (this._currentFilter === filterType) {
+      return;
+    }
+
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 }

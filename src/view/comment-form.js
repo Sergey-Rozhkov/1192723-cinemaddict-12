@@ -16,64 +16,9 @@ export default class CommentAddFormView extends SmartView {
     this._setInnerHandlers();
   }
 
-  _setInnerHandlers() {
-    this._emojiBlockElement = this.getElement().querySelector(`.film-details__add-emoji-label`);
-
-    const emoji = this.getElement()
-      .querySelectorAll(`[name="comment-emoji"]`);
-
-    emoji.forEach((element) => {
-      element.addEventListener(`change`, this._emotionClickHandler);
-    });
-  }
-
   restoreHandlers() {
     this._setInnerHandlers();
     this.setCommentAddHandler(this._callback.commentAddHandler);
-  }
-
-  _emotionClickHandler(evt) {
-    let img = document.createElement(`img`);
-    img.width = EMOJI_WIDTH;
-    img.heigth = EMOJI_HEIGHT;
-    img.src = evt.currentTarget.nextElementSibling.querySelector(`img`).src;
-    this._emojiBlockElement.innerHTML = ``;
-    this._emojiBlockElement.append(img);
-    this._emotionElement = this._emojiBlockElement.innerHTML;
-  }
-
-  _restoreEmotion() {
-    if (this._emotionElement === null) {
-      return ``;
-    }
-
-    return this._emotionElement;
-  }
-
-  setCommentAddHandler(callback) {
-    this._callback.commentAddHandler = callback;
-    this.getElement().addEventListener(`keydown`, this._commentAddHandler);
-  }
-
-  _commentAddHandler(evt) {
-    if ((evt.ctrlKey || evt.metaKey) && ((evt.keyCode === 10 || evt.keyCode === 13))) {
-      const text = this.getElement().querySelector(`.film-details__inner [name=comment]`).value;
-      const emotionElement = this.getElement().querySelector(`.film-details__inner [name=comment-emoji]:checked`);
-      const emotion = emotionElement ? emotionElement.value : null;
-      const date = new Date();
-
-      if (!text || !emotion) {
-        this.shake();
-        return;
-      }
-
-      evt.preventDefault();
-      this._callback.commentAddHandler({
-        text,
-        emotion,
-        date
-      });
-    }
   }
 
   getTemplate() {
@@ -112,5 +57,60 @@ export default class CommentAddFormView extends SmartView {
         </div>
       </div>`
     );
+  }
+
+  setCommentAddHandler(callback) {
+    this._callback.commentAddHandler = callback;
+    this.getElement().addEventListener(`keydown`, this._commentAddHandler);
+  }
+
+  _setInnerHandlers() {
+    this._emojiBlockElement = this.getElement().querySelector(`.film-details__add-emoji-label`);
+
+    const emoji = this.getElement()
+      .querySelectorAll(`[name="comment-emoji"]`);
+
+    emoji.forEach((element) => {
+      element.addEventListener(`change`, this._emotionClickHandler);
+    });
+  }
+
+  _restoreEmotion() {
+    if (this._emotionElement === null) {
+      return ``;
+    }
+
+    return this._emotionElement;
+  }
+
+  _emotionClickHandler(evt) {
+    const img = document.createElement(`img`);
+    img.width = EMOJI_WIDTH;
+    img.heigth = EMOJI_HEIGHT;
+    img.src = evt.currentTarget.nextElementSibling.querySelector(`img`).src;
+    this._emojiBlockElement.innerHTML = ``;
+    this._emojiBlockElement.append(img);
+    this._emotionElement = this._emojiBlockElement.innerHTML;
+  }
+
+  _commentAddHandler(evt) {
+    if ((evt.ctrlKey || evt.metaKey) && ((evt.keyCode === 10 || evt.keyCode === 13))) {
+      const text = this.getElement().querySelector(`.film-details__inner [name=comment]`).value;
+      const emotionElement = this.getElement().querySelector(`.film-details__inner [name=comment-emoji]:checked`);
+      const emotion = emotionElement ? emotionElement.value : null;
+      const date = new Date();
+
+      if (!text || !emotion) {
+        this.shake();
+        return;
+      }
+
+      evt.preventDefault();
+      this._callback.commentAddHandler({
+        text,
+        emotion,
+        date
+      });
+    }
   }
 }

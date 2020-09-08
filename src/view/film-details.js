@@ -12,56 +12,6 @@ export default class FilmDetailView extends SmartView {
     this._inWatchlistClickHandler = this._inWatchlistClickHandler.bind(this);
   }
 
-  _favoriteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.favoriteClick();
-  }
-
-  _alreadyWatchClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.alreadyWatchClick();
-  }
-
-  _inWatchlistClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.inWatchlistClick();
-  }
-
-  _closePopupFilmDetailHandler() {
-    this._callback.closeFilmDetail();
-  }
-
-  setClosePopupFilmDetailHandler(callback) {
-    this._callback.closeFilmDetail = callback;
-
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closePopupFilmDetailHandler);
-  }
-
-  setFavoriteClickHandler(callback) {
-    this._callback.favoriteClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
-  }
-
-  setAlreadyWatchClickHandler(callback) {
-    this._callback.alreadyWatchClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._alreadyWatchClickHandler);
-  }
-
-  setInWatchlistClickHandler(callback) {
-    this._callback.inWatchlistClick = callback;
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._inWatchlistClickHandler);
-  }
-
-  _createFilmDetailGenres(genres) {
-    return (`
-      <tr class="film-details__row">
-        <td class="film-details__term">Genre${genres.length > 1 ? `s` : ``}</td>
-        <td class="film-details__cell">
-        ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``)}
-      </tr>
-  `);
-  }
-
   restoreHandlers() {
     this.setClosePopupFilmDetailHandler(this._callback.closeFilmDetail);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
@@ -154,6 +104,56 @@ export default class FilmDetailView extends SmartView {
         </form>
       </section>`
     );
+  }
+
+  setClosePopupFilmDetailHandler(callback) {
+    this._callback.closeFilmDetail = callback;
+
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closePopupFilmDetailHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  setAlreadyWatchClickHandler(callback) {
+    this._callback.alreadyWatchClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, this._alreadyWatchClickHandler);
+  }
+
+  setInWatchlistClickHandler(callback) {
+    this._callback.inWatchlistClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._inWatchlistClickHandler);
+  }
+
+  _createFilmDetailGenres(genres) {
+    return (`
+      <tr class="film-details__row">
+        <td class="film-details__term">Genre${genres.length > 1 ? `s` : ``}</td>
+        <td class="film-details__cell">
+        ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``)}
+      </tr>
+  `);
+  }
+
+  _closePopupFilmDetailHandler() {
+    this._callback.closeFilmDetail();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  _alreadyWatchClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchClick();
+  }
+
+  _inWatchlistClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.inWatchlistClick();
   }
 }
 

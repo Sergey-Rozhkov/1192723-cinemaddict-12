@@ -10,51 +10,8 @@ export default class CommentView extends SmartView {
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
   }
 
-  _commentDeleteHandler(evt) {
-    evt.preventDefault();
-    const commentId = evt.target.dataset.commentId;
-    this._callback.commentDeleteClick(commentId);
-  }
-
-  setCommentDeleteHandler(callback) {
-    this._callback.commentDeleteClick = callback;
-
-    this._setInnerHandlers();
-  }
-
-  _setInnerHandlers() {
-    if (this._data.isOnline) {
-      const commentDeleteBtnElement = this.getElement().querySelector(`.film-details__comment-delete`);
-      commentDeleteBtnElement.addEventListener(`click`, this._commentDeleteHandler);
-    }
-  }
-
   restoreHandlers() {
     this._setInnerHandlers();
-  }
-
-  static parseCommentToData(comment) {
-    return Object.assign(
-        {},
-        comment,
-        {
-          isDisabled: false,
-          isDeleting: false,
-          isOnline: true
-        }
-    );
-  }
-
-  _getDeleteButton(id, isOnline, isDisabled, isDeleting) {
-    if (!isOnline) {
-      return ``;
-    }
-
-    return (
-      `<button class="film-details__comment-delete" data-comment-id="${id}" ${isDisabled ? `disabled` : ``}>
-      ${isDeleting ? `Deleting...` : `Delete`}
-      </button>`
-    );
   }
 
   getTemplate() {
@@ -74,6 +31,49 @@ export default class CommentView extends SmartView {
               </p>
             </div>
           </li>`
+    );
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callback.commentDeleteClick = callback;
+
+    this._setInnerHandlers();
+  }
+
+  _getDeleteButton(id, isOnline, isDisabled, isDeleting) {
+    if (!isOnline) {
+      return ``;
+    }
+
+    return (
+      `<button class="film-details__comment-delete" data-comment-id="${id}" ${isDisabled ? `disabled` : ``}>
+      ${isDeleting ? `Deleting...` : `Delete`}
+      </button>`
+    );
+  }
+
+  _setInnerHandlers() {
+    if (this._data.isOnline) {
+      const commentDeleteBtnElement = this.getElement().querySelector(`.film-details__comment-delete`);
+      commentDeleteBtnElement.addEventListener(`click`, this._commentDeleteHandler);
+    }
+  }
+
+  _commentDeleteHandler(evt) {
+    evt.preventDefault();
+    const commentId = evt.target.dataset.commentId;
+    this._callback.commentDeleteClick(commentId);
+  }
+
+  static parseCommentToData(comment) {
+    return Object.assign(
+        {},
+        comment,
+        {
+          isDisabled: false,
+          isDeleting: false,
+          isOnline: true
+        }
     );
   }
 }
